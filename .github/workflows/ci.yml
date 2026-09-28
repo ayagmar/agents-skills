@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Check gh supports skill publish
+        run: |
+          gh --version
+          if ! gh skill publish --help >/dev/null 2>&1; then
+            echo "::error::gh on this runner lacks 'gh skill publish' (needs GitHub CLI >= 2.90); install a newer gh release in this workflow." >&2
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate
+        run: npm run validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Ensure no generated diff
+        run: |
+          git diff --exit-code
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Validation produced untracked files:"
+            git status --porcelain
+            exit 1
+          fi
+
+      - name: Write pack dry-run reports
+        if: failure()
+        run: |
+          mkdir -p "${{ runner.temp }}/pack-reports"
+          for dir in plugins/*/; do
+            name=$(basename "$dir")
+            npm pack --dry-run --json --workspace "plugins/$name" \
+              > "${{ runner.temp }}/pack-reports/$name.json" || true
+          done
+
+      - name: Upload pack dry-run reports
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pack-reports
+          path: ${{ runner.temp }}/pack-reports
+          retention-days: 7
+
+  secret-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: TruffleHog secret scan
+        uses: trufflesecurity/trufflehog@4dd8831c5f12599465d4d45c3c447b4018a34c85 # v3.97.9
+        with:
+          version: 3.97.9
+          extra_args: --results=verified,unknown
