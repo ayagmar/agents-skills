@@ -21,8 +21,8 @@
     "validate:versions": "node scripts/check-versions.mjs",
     "validate:links": "node scripts/check-relative-links.mjs",
     "validate:packages": "node scripts/check-package-contents.mjs",
-    "validate:skills": "gh skill publish --dry-run .",
-    "validate:claude": "claude plugin validate --strict .",
+    "validate:skills": "node scripts/validate.mjs skills",
+    "validate:claude": "node scripts/validate.mjs claude",
     "smoke:install": "node scripts/smoke-install.mjs",
     "version-packages": "changeset version && node scripts/sync-versions.mjs && node scripts/check-versions.mjs",
     "release": "npm run validate && changeset publish"
@@ -33,7 +33,8 @@
     "@earendil-works/pi-coding-agent": "0.87.1",
     "@openai/codex": "0.158.0",
     "ajv-cli": "5.0.0",
-    "skills": "1.7.0"
+    "skills": "1.7.0",
+    "yaml": "2.9.1"
   },
   "overrides": {
     "fast-json-patch": "3.1.1"
