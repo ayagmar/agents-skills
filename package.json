@@ -24,7 +24,7 @@
     "validate:skills": "node scripts/validate.mjs skills",
     "validate:claude": "node scripts/validate.mjs claude",
     "smoke:install": "node scripts/smoke-install.mjs",
-    "version-packages": "changeset version && node scripts/sync-versions.mjs && node scripts/check-versions.mjs",
+    "version-packages": "changeset version && node scripts/sync-versions.mjs && npm install --package-lock-only --ignore-scripts && node scripts/check-versions.mjs",
     "release": "npm run validate && changeset publish"
   },
   "devDependencies": {
