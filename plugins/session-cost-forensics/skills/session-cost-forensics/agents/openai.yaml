@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Cost Forensics"
+  short_description: "Analyze Codex, Pi, and Claude Code session token costs"
+  default_prompt: "Use $session-cost-forensics to analyze recent Codex, Pi, or Claude Code sessions for cost, token waste, and orchestration inefficiency."

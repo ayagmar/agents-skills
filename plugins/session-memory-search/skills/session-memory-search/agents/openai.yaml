@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Memory"
+  short_description: "Search Codex, Pi, and Claude Code session history"
+  default_prompt: "Use $session-memory-search to find previous Codex, Pi, or Claude Code sessions about a topic and summarize the relevant memory."
