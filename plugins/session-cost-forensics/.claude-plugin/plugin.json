@@ -1,0 +1,19 @@
+{
+  "name": "session-cost-forensics",
+  "version": "0.0.0",
+  "description": "Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, and duplicate sessions.",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "repository": "https://github.com/ayagmar/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "cost-analysis",
+    "token-usage"
+  ]
+}

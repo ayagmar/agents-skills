@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "session-memory-search",
+  "version": "0.0.0",
+  "description": "Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, and conversation snippets.",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "repository": "https://github.com/ayagmar/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "session-search",
+    "memory"
+  ]
+}
