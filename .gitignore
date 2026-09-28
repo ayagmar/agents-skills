@@ -26,3 +26,11 @@ Thumbs.db
 
 # Temp packaging output
 .tmp-pack/
+
+# Local agent settings and project-scoped skill installs
+.claude/
+CLAUDE.local.md
+.codex/
+.pi/
+.agents/skills/
+skills-lock.json

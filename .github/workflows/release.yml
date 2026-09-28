@@ -5,7 +5,9 @@
 #   workflow release.yml and environment release, with `npm publish` allowed;
 # - the `release` environment exists with deployment branches limited to main
 #   (GitHub otherwise auto-creates it with no protection);
-# - "Allow GitHub Actions to create and approve pull requests" is enabled.
+# - "Allow GitHub Actions to create and approve pull requests" is enabled;
+# - the version PR is opened with GITHUB_TOKEN, so CI does not run on it by
+#   itself: run `gh workflow run ci.yml --ref changeset-release/main` before merging.
 # Publishing never uses an npm token.
 name: Release
 
