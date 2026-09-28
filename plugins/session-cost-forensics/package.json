@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/session-cost-forensics",
+  "version": "0.0.0",
+  "description": "Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, and duplicate sessions.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "cost-analysis",
+    "token-usage"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/session-cost-forensics#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/session-cost-forensics"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

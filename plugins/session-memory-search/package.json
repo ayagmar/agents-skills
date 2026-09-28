@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/session-memory-search",
+  "version": "0.0.0",
+  "description": "Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, and conversation snippets.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "session-search",
+    "memory"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/session-memory-search#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/session-memory-search"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}
