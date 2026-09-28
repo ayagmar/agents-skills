@@ -1,0 +1,41 @@
+{
+  "name": "agents-skills",
+  "private": true,
+  "description": "Versioned, cross-agent Agent Skills monorepo with selective installation and automated releases.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git"
+  },
+  "type": "module",
+  "workspaces": [
+    "plugins/*"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "packageManager": "npm@11.6.2",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "validate:layout": "node scripts/check-layout.mjs",
+    "validate:versions": "node scripts/check-versions.mjs",
+    "validate:links": "node scripts/check-relative-links.mjs",
+    "validate:packages": "node scripts/check-package-contents.mjs",
+    "validate:skills": "gh skill publish --dry-run .",
+    "validate:claude": "claude plugin validate --strict .",
+    "smoke:install": "node scripts/smoke-install.mjs",
+    "version-packages": "changeset version && node scripts/sync-versions.mjs && node scripts/check-versions.mjs",
+    "release": "npm run validate && changeset publish"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-code": "2.1.283",
+    "@changesets/cli": "3.0.3",
+    "@earendil-works/pi-coding-agent": "0.87.1",
+    "@openai/codex": "0.158.0",
+    "ajv-cli": "5.0.0",
+    "skills": "1.7.0"
+  },
+  "overrides": {
+    "fast-json-patch": "3.1.1"
+  }
+}
