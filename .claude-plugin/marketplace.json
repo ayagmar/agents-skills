@@ -1,0 +1,20 @@
+{
+  "name": "ayagmar-skills",
+  "owner": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "description": "Catalog of local-first skills for mining and analyzing Codex, Pi, and Claude Code session history.",
+  "plugins": [
+    {
+      "name": "session-memory-search",
+      "source": "./plugins/session-memory-search",
+      "description": "Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, and conversation snippets."
+    },
+    {
+      "name": "session-cost-forensics",
+      "source": "./plugins/session-cost-forensics",
+      "description": "Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, and duplicate sessions."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "ayagmar-skills",
+  "interface": {
+    "displayName": "Ayagmar Skills"
+  },
+  "plugins": [
+    {
+      "name": "session-memory-search",
+      "source": {
+        "source": "local",
+        "path": "./plugins/session-memory-search"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "session-cost-forensics",
+      "source": {
+        "source": "local",
+        "path": "./plugins/session-cost-forensics"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
