@@ -13,11 +13,12 @@ const FENCE = /^ {0,3}(`{3,}|~{3,})/;
 const IGNORED_TARGET = /^(https?:|mailto:|#)/i;
 
 function listMarkdownFiles() {
-  const output = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', '--', '*.md'], {
+  const output = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', '*.md'], {
     cwd: repoRoot,
     encoding: 'utf8',
   });
-  return output.split('\n').filter(Boolean);
+  // Tracked files deleted from disk but not yet staged are still listed; they have no links to check.
+  return output.split('\0').filter(Boolean).filter((file) => fs.existsSync(path.join(repoRoot, file)));
 }
 
 function boundaryFor(file) {
