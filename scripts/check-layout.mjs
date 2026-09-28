@@ -102,29 +102,57 @@ function checkFrontmatter(name) {
   if (compatibility !== undefined && (typeof compatibility !== 'string' || compatibility.length > 500)) {
     report(file, 'frontmatter compatibility must be a string of at most 500 characters');
   }
+
+  const packageLicense = readJson(pluginPath(name, 'package.json')).license;
+  if (frontmatter.license !== undefined && frontmatter.license !== packageLicense) {
+    report(file, `frontmatter license "${frontmatter.license}" must equal the package.json license "${packageLicense}"`);
+  }
 }
 
 function checkManifests(name) {
   const packageFile = pluginPath(name, 'package.json');
   const portableFile = pluginPath(name, 'plugin.json');
   const claudeFile = pluginPath(name, '.claude-plugin', 'plugin.json');
+  const pkg = readJson(packageFile);
+  const portable = readJson(portableFile);
+  const claude = readJson(claudeFile);
 
-  const packageName = readJson(packageFile).name;
-  if (packageName !== `${NPM_SCOPE}/${name}`) {
-    report(packageFile, `name "${packageName}" must be "${NPM_SCOPE}/${name}"`);
+  if (pkg.name !== `${NPM_SCOPE}/${name}`) {
+    report(packageFile, `name "${pkg.name}" must be "${NPM_SCOPE}/${name}"`);
+  }
+  if (pkg.private === true) {
+    report(packageFile, 'must not be "private": true (every plugin is published to npm)');
+  }
+  if (Object.keys(pkg.dependencies ?? {}).length > 0) {
+    report(packageFile, 'packages must not declare runtime dependencies unless the skill scripts import them');
+  }
+  if (pkg.description !== portable.description) {
+    report(packageFile, 'description must equal the plugin.json description');
   }
 
-  const portable = readJson(portableFile);
   if (portable.$schema !== PORTABLE_SCHEMA) {
     report(portableFile, `$schema must be exactly "${PORTABLE_SCHEMA}" (Codex silently falls back to .claude-plugin/plugin.json otherwise)`);
   }
   if (portable.name !== name) {
     report(portableFile, `name "${portable.name}" must equal the plugin directory name "${name}"`);
   }
+  if (claude.name !== name) {
+    report(claudeFile, `name "${claude.name}" must equal the plugin directory name "${name}"`);
+  }
 
-  const claudeName = readJson(claudeFile).name;
-  if (claudeName !== name) {
-    report(claudeFile, `name "${claudeName}" must equal the plugin directory name "${name}"`);
+  // The Claude manifest is a compatibility copy of the portable manifest.
+  for (const field of ['description', 'repository']) {
+    if (claude[field] !== portable[field]) {
+      report(claudeFile, `${field} must equal the plugin.json ${field}`);
+    }
+  }
+  if (JSON.stringify(claude.author) !== JSON.stringify(portable.author)) {
+    report(claudeFile, 'author must equal the plugin.json author');
+  }
+  for (const [file, manifest] of [[portableFile, portable], [claudeFile, claude]]) {
+    if (manifest.license !== pkg.license) {
+      report(file, `license "${manifest.license}" must equal the package.json license "${pkg.license}"`);
+    }
   }
 }
 
