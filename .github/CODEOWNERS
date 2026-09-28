@@ -1,0 +1,4 @@
+# Single owner for the whole repository: plugins/, both marketplace catalogs
+# (.claude-plugin/marketplace.json, .agents/plugins/marketplace.json), workflows
+# (including the release workflow), and SECURITY.md.
+* @ayagmar
