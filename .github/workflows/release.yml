@@ -1,0 +1,185 @@
+# Release is gated by the repository variable NPM_PUBLISH_ENABLED. Until it is
+# 'true', every job is skipped. Set it only after all of these are in place:
+# - the repository is public (npm provenance rejects private repositories);
+# - each package already exists on npm and has a trusted publisher for
+#   workflow release.yml and environment release, with `npm publish` allowed;
+# - the `release` environment exists with deployment branches limited to main
+#   (GitHub otherwise auto-creates it with no protection);
+# - "Allow GitHub Actions to create and approve pull requests" is enabled.
+# Publishing never uses an npm token.
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  select:
+    if: vars.NPM_PUBLISH_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select.outputs.mode }}
+      publish-plan-artifact-id: ${{ steps.select.outputs.publish-plan-artifact-id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Select mode
+        id: select
+        uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+
+  version:
+    needs: select
+    if: needs.select.outputs.mode == 'version'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Create version PR
+        uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          script: npm run version-packages
+          commit-message: "chore(release): version packages"
+          pr-title: "chore(release): version packages"
+
+  pack:
+    needs: select
+    if: needs.select.outputs.mode == 'publish'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate
+        run: npm run validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Ensure no generated diff
+        run: |
+          git diff --exit-code
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Validation produced untracked files:"
+            git status --porcelain
+            exit 1
+          fi
+
+      - name: Pack
+        id: pack
+        uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          publish-plan-artifact-id: ${{ needs.select.outputs.publish-plan-artifact-id }}
+
+  publish:
+    needs: pack
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+      published-packages: ${{ steps.publish.outputs.published-packages }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Publish
+        id: publish
+        uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
+
+  verify:
+    needs: publish
+    if: ${{ !cancelled() && needs.publish.outputs.published == 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Check published versions
+        shell: bash
+        env:
+          PUBLISHED: ${{ needs.publish.outputs.published-packages }}
+        run: |
+          while read -r name version; do
+            spec="$name@$version"
+            attempts=0
+            until [ "$(npm view "$spec" version)" = "$version" ]; do
+              attempts=$((attempts + 1))
+              if [ "$attempts" -ge 6 ]; then
+                echo "::error::$spec is not on npm"
+                exit 1
+              fi
+              sleep 10
+            done
+            echo "$spec is on npm. Tarball files:"
+            npm pack "$spec" --dry-run --json | jq -r '.[0].files[].path'
+          done < <(jq -r '.[] | "\(.name) \(.version)"' <<< "$PUBLISHED")
