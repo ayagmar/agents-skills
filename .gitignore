@@ -1,0 +1,28 @@
+# Node
+node_modules/
+*.tgz
+coverage/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Session logs (Codex/Pi/Claude)
+*.jsonl
+*.jsonl.gz
+*.ndjson
+
+# Logs
+npm-debug.log*
+*.log
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Temp packaging output
+.tmp-pack/
