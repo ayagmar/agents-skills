@@ -31,6 +31,8 @@ Add one entry to each marketplace catalog, keyed by the plugin directory name:
 
 Each plugin must appear exactly once in each catalog; `scripts/check-layout.mjs` fails otherwise.
 
+Start a new plugin at `0.0.0` in `package.json`, `plugin.json` and `.claude-plugin/plugin.json` and add a `minor` Changeset so its first release is `0.1.0`.
+
 ## SKILL.md frontmatter rules
 
 Agent Skills frontmatter only allows these keys: `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`. Any other key (including `version` or `metadata.version`) is rejected — `package.json` is the only source of truth for version numbers. Provider-only metadata (for example something Codex-specific) goes in `agents/openai.yaml` next to the skill, not in the frontmatter.
@@ -67,6 +69,12 @@ Select every `plugins/*` package you changed and pick the bump per the contract:
 
 Every changed workspace must be listed in a Changeset. One Changeset file may list several packages when they share the same change (for example the initial release); unrelated changes get separate Changesets.
 
+## Releasing
+
+Merging Changesets to main makes `.github/workflows/release.yml` open or update a `chore(release): version packages` PR (it runs `npm run version-packages`). That PR is created with `GITHUB_TOKEN`, so CI does not start on it automatically — run `gh workflow run ci.yml --ref changeset-release/main` (or close and reopen the PR) before merging. Merging it validates, packs, and publishes only the changed workspaces via npm trusted publishing with provenance, creating `@ayagmar/<name>@<version>` tags and GitHub releases.
+
+Everything is skipped until the repository variable `NPM_PUBLISH_ENABLED` is `true`; the prerequisites are listed at the top of `release.yml`. npm only accepts a trusted publisher for a package that already exists, so the maintainer bootstraps each new package once by hand before the workflow can publish it.
+
 ## Local validation
 
 Before opening a PR, run:
@@ -74,6 +82,8 @@ Before opening a PR, run:
 ```bash
 npm ci && npm run validate
 ```
+
+Use Node 24 (`.nvmrc`); the pinned dev tooling installs only on Node ^22.20, 24, or >=26 (`engine-strict`).
 
 This runs, in order: `layout`, `versions`, `links`, `syntax`, `schema`, `skills`, `claude`, `packages`, `smoke`. You can run a single stage with `node scripts/validate.mjs <stage>`. The `skills` stage needs [GitHub CLI](https://cli.github.com) >= 2.90 on `PATH` for `gh skill publish --dry-run`.
 
@@ -93,7 +103,7 @@ Use synthetic, hand-written fixtures for tests and examples instead.
 Scripts under `plugins/<name>/skills/<name>/scripts/` are reviewed with extra care because they run with the installing user's permissions:
 
 - Prefer Node.js built-ins; a new runtime dependency needs a clear justification in the PR description.
-- No network access: scripts read local session stores only. `rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)"` over the script should return nothing.
+- No network access: scripts read local session stores only. `rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)"` over the script is a quick heuristic — it can miss bare `"https"`/`"net"`/`"dns"` imports, `require(...)`, `WebSocket`, or spawned tools like `curl`. Human review of every script change is the actual control.
 - Read-only access to session stores — scripts must not write to `~/.codex`, `~/.pi/agent/sessions`, or `~/.claude/projects`.
 - No hard-coded user paths (`/home/<user>`, `/Users/<user>`, `C:\Users\...`); resolve paths from `os.homedir()` or environment variables.
 - `node --check <script>` must be clean; this is also enforced by the `syntax` validate stage.

@@ -23,18 +23,21 @@ Both skills open local session stores **read-only**:
 - `~/.codex` (Codex session logs)
 - `~/.pi/agent/sessions` (Pi session logs)
 - `~/.claude/projects` (Claude Code session logs)
+- `~/.claude/history.jsonl` (Claude Code prompt index; named by `session-cost-forensics` as a reference source)
 
 Neither skill writes to these directories. `session-memory-search` may additionally spawn a local `rg` (ripgrep) subprocess to prefilter files faster; it reads the same local paths and performs no network I/O.
 
+The scripts themselves make no network calls, but their output is returned to the invoking agent like any other tool output, so it reaches that agent's model provider: `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project`/`--since` to keep other projects' sessions out of scope.
+
 ## No-network guarantee
 
-The initial versions of both skills make no network requests. This is verified as part of code review by grepping every script for network primitives:
+The initial versions of both skills make no network requests. The control is human review of every script change (the PR template checkbox and CODEOWNERS require it), not an automated gate. A quick first check:
 
 ```bash
 rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)" plugins/*/skills/*/scripts
 ```
 
-An empty result is required before a release.
+This is a heuristic and can miss some patterns (bare `"https"`/`"net"`/`"dns"` imports, `require(...)`, `WebSocket`, spawned tools like `curl`), so it does not replace review.
 
 ## What maintainers verify before release
 
@@ -47,7 +50,8 @@ Every release must pass `npm run validate`, which runs:
 - `schema` — portable plugin manifests validate against the Agent Plugins JSON Schema.
 - `skills` — `gh skill publish --dry-run` (requires GitHub CLI >= 2.90).
 - `claude` — `claude plugin validate --strict` against the repo root and each plugin.
-- `packages` — each workspace's `npm pack --dry-run` tarball is checked against an exact allowlist of expected files, scanned for sensitive-file patterns (`.env`, credentials, private keys, logs, `node_modules`, etc.) and hard-coded user paths (`/home/<user>`, `/Users/<user>`, `C:\Users\...`).
+- `packages` — each workspace's `npm pack --dry-run` tarball must contain exactly `package.json`, `plugin.json`, `.claude-plugin/plugin.json`, `README.md`, `LICENSE`, and the files under that plugin's own `skills/<name>/` directory, and nothing else; every packed file is checked against a sensitive-file denylist (`.env`, JSONL/NDJSON, logs, source maps, `.npmrc`, keys, credentials, `auth.json`, caches, `node_modules`) and text files are scanned for hard-coded user paths (`/home/<user>`, `/Users/<user>`, `C:\Users\...`). Files inside the skill directory are not individually allowlisted, so review any new file added there.
 - `smoke` — install smoke tests run against isolated `HOME`/config directories.
+- `secret scan` — CI runs TruffleHog over pushed commits and pull requests.
 
-Once the repository is public, published npm artifacts additionally carry npm provenance and a matching Git tag / GitHub release, per the [version and release contract](README.md#versioning-and-compatibility).
+Every version published by the release workflow has npm provenance and a matching Git tag / GitHub release (the first publish of each package is a one-time manual bootstrap — see [CONTRIBUTING.md](CONTRIBUTING.md)), per the [version and release contract](README.md#versioning-and-compatibility).

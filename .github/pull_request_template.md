@@ -8,4 +8,4 @@
 - [ ] `npm run validate` passes locally
 - [ ] Privacy review: no real session logs, transcripts, credentials, or customer data were added (including as test fixtures)
 - [ ] Script changes reviewed: no network calls, read-only access to session stores, no hard-coded user paths
-- [ ] Package contents inspected: `node scripts/validate.mjs packages`
+- [ ] Package contents inspected for every changed plugin: `npm pack --dry-run --workspace plugins/<name>` (review the Tarball Contents list)
