@@ -6,9 +6,7 @@ Each skill package (`@ayagmar/session-memory-search`, `@ayagmar/session-cost-for
 
 ## Reporting a vulnerability
 
-While this repository is **private**, report security issues through its issue tracker — visible only to collaborators with access to the repository.
-
-Once the repository is public, use GitHub's private vulnerability reporting instead of a public issue: https://github.com/ayagmar/agents-skills/security/advisories/new
+Use GitHub's private vulnerability reporting instead of a public issue: https://github.com/ayagmar/agents-skills/security/advisories/new
 
 Do not report vulnerabilities to a public email address; none is published for this project.
 

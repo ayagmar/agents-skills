@@ -2,7 +2,7 @@
 
 Versioned, cross-agent [Agent Skills](https://agentskills.io/specification) for Pi, Claude Code, Codex, and Cursor, with selective per-skill installation.
 
-> **Status**: the `ayagmar/agents-skills` repository is currently **private** and no package has been published to npm yet. The first release will be `0.1.0` via [Changesets](https://github.com/changesets/changesets). All install commands below apply once the repository is public and the packages are published.
+> **Status**: no package has been published to npm yet; the first release will be `0.1.0` via [Changesets](https://github.com/changesets/changesets). Until then, the Pi npm install commands below do not work, but the skills CLI, Claude, and Codex installs from this repository do.
 
 ## What's here
 
