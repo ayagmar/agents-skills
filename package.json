@@ -30,7 +30,7 @@
   "devDependencies": {
     "@anthropic-ai/claude-code": "2.1.287",
     "@changesets/cli": "3.0.3",
-    "@earendil-works/pi-coding-agent": "0.87.1",
+    "@earendil-works/pi-coding-agent": "1.0.0",
     "@openai/codex": "0.160.0",
     "ajv-cli": "5.0.0",
     "skills": "1.7.0",
