@@ -1,6 +1,6 @@
 {
   "name": "@ayagmar/implementation-plan-author",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Author self-contained implementation plans, multi-plan programs, or compact handoffs that a fresh agent can execute without conversational memory.",
   "keywords": [
     "agent-skills",

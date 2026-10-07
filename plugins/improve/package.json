@@ -1,6 +1,6 @@
 {
   "name": "@ayagmar/improve",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Survey a codebase as a senior advisor, report prioritized improvements, and implement selected fixes or produce handoff plans.",
   "keywords": [
     "agent-skills",
