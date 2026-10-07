@@ -1,6 +1,6 @@
 {
   "name": "release-readiness-certification",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Produce a strict evidence-based release verdict with severity-ranked findings, blockers, a pre-release work batch, and a deferred backlog.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "advisor-executor-quality-loop",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Orchestrate complex multi-task work by separating advisor reasoning, delegated execution, and independent verification until tasks converge.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

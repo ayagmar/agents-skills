@@ -1,6 +1,6 @@
 {
   "name": "adversarial-plan-approval",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Independently falsify or approve implementation plans before execution with ACCEPT, MODIFY, or REJECT verdicts per task or decision gate.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "improve",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Survey a codebase as a senior advisor, report prioritized improvements, and implement selected fixes or produce handoff plans.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

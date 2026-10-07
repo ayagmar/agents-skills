@@ -1,6 +1,6 @@
 {
   "name": "@ayagmar/session-memory-search",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, and conversation snippets.",
   "keywords": [
     "agent-skills",

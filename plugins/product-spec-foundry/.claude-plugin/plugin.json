@@ -1,6 +1,6 @@
 {
   "name": "product-spec-foundry",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Turn a product idea, loose PRD, or inconsistent pre-implementation repository into an implementation-ready specification package.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

@@ -1,6 +1,6 @@
 {
   "name": "@ayagmar/engineering-optimization",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Improve performance, resource use, determinism, or simplicity through measurement, profiling, benchmarks, and proven equivalence.",
   "keywords": [
     "agent-skills",

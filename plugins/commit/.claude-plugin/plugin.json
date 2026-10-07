@@ -1,6 +1,6 @@
 {
   "name": "commit",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Create Conventional Commits safely, including logical commit stacks over mixed working trees and plan-traceable commit sequences.",
   "author": {
     "name": "Abdeslam Yassine Agmar",
