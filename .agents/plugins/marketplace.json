@@ -5,10 +5,87 @@
   },
   "plugins": [
     {
-      "name": "session-memory-search",
+      "name": "adversarial-plan-approval",
       "source": {
         "source": "local",
-        "path": "./plugins/session-memory-search"
+        "path": "./plugins/adversarial-plan-approval"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "advisor-executor-quality-loop",
+      "source": {
+        "source": "local",
+        "path": "./plugins/advisor-executor-quality-loop"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "commit",
+      "source": {
+        "source": "local",
+        "path": "./plugins/commit"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "engineering-optimization",
+      "source": {
+        "source": "local",
+        "path": "./plugins/engineering-optimization"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "implementation-plan-author",
+      "source": {
+        "source": "local",
+        "path": "./plugins/implementation-plan-author"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "improve",
+      "source": {
+        "source": "local",
+        "path": "./plugins/improve"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "product-spec-foundry",
+      "source": {
+        "source": "local",
+        "path": "./plugins/product-spec-foundry"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "release-readiness-certification",
+      "source": {
+        "source": "local",
+        "path": "./plugins/release-readiness-certification"
       },
       "policy": {
         "installation": "AVAILABLE"
@@ -20,6 +97,28 @@
       "source": {
         "source": "local",
         "path": "./plugins/session-cost-forensics"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "session-memory-search",
+      "source": {
+        "source": "local",
+        "path": "./plugins/session-memory-search"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "summarize",
+      "source": {
+        "source": "local",
+        "path": "./plugins/summarize"
       },
       "policy": {
         "installation": "AVAILABLE"

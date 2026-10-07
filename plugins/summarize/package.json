@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/summarize",
+  "version": "0.0.0",
+  "description": "Fetch a URL or convert a local file (PDF, DOCX, HTML, and more) into Markdown with markitdown, optionally summarizing it.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "markdown",
+    "summarization"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/summarize#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/summarize"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

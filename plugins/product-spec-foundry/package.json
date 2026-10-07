@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/product-spec-foundry",
+  "version": "0.0.0",
+  "description": "Turn a product idea, loose PRD, or inconsistent pre-implementation repository into an implementation-ready specification package.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "product-spec",
+    "requirements"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/product-spec-foundry#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/product-spec-foundry"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

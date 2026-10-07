@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/implementation-plan-author",
+  "version": "0.0.0",
+  "description": "Author self-contained implementation plans, multi-plan programs, or compact handoffs that a fresh agent can execute without conversational memory.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "planning",
+    "handoff"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/implementation-plan-author#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/implementation-plan-author"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

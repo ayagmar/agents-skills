@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "product-spec-foundry",
+  "version": "0.0.0",
+  "description": "Turn a product idea, loose PRD, or inconsistent pre-implementation repository into an implementation-ready specification package.",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "repository": "https://github.com/ayagmar/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "product-spec",
+    "requirements"
+  ]
+}

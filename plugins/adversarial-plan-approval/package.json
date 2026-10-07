@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/adversarial-plan-approval",
+  "version": "0.0.0",
+  "description": "Independently falsify or approve implementation plans before execution with ACCEPT, MODIFY, or REJECT verdicts per task or decision gate.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "plan-review",
+    "verification"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/adversarial-plan-approval#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/adversarial-plan-approval"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

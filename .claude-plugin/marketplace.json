@@ -4,17 +4,62 @@
     "name": "Abdeslam Yassine Agmar",
     "url": "https://github.com/ayagmar"
   },
-  "description": "Catalog of local-first skills for mining and analyzing Codex, Pi, and Claude Code session history.",
+  "description": "Catalog of agent skills for planning and review workflows, commits, document summarization, and local session history search and cost forensics.",
   "plugins": [
+    {
+      "name": "adversarial-plan-approval",
+      "source": "./plugins/adversarial-plan-approval",
+      "description": "Independently falsify or approve implementation plans before execution with ACCEPT, MODIFY, or REJECT verdicts per task or decision gate."
+    },
+    {
+      "name": "advisor-executor-quality-loop",
+      "source": "./plugins/advisor-executor-quality-loop",
+      "description": "Orchestrate complex multi-task work by separating advisor reasoning, delegated execution, and independent verification until tasks converge."
+    },
+    {
+      "name": "commit",
+      "source": "./plugins/commit",
+      "description": "Create Conventional Commits safely, including logical commit stacks over mixed working trees and plan-traceable commit sequences."
+    },
+    {
+      "name": "engineering-optimization",
+      "source": "./plugins/engineering-optimization",
+      "description": "Improve performance, resource use, determinism, or simplicity through measurement, profiling, benchmarks, and proven equivalence."
+    },
+    {
+      "name": "implementation-plan-author",
+      "source": "./plugins/implementation-plan-author",
+      "description": "Author self-contained implementation plans, multi-plan programs, or compact handoffs that a fresh agent can execute without conversational memory."
+    },
+    {
+      "name": "improve",
+      "source": "./plugins/improve",
+      "description": "Survey a codebase as a senior advisor, report prioritized improvements, and implement selected fixes or produce handoff plans."
+    },
+    {
+      "name": "product-spec-foundry",
+      "source": "./plugins/product-spec-foundry",
+      "description": "Turn a product idea, loose PRD, or inconsistent pre-implementation repository into an implementation-ready specification package."
+    },
+    {
+      "name": "release-readiness-certification",
+      "source": "./plugins/release-readiness-certification",
+      "description": "Produce a strict evidence-based release verdict with severity-ranked findings, blockers, a pre-release work batch, and a deferred backlog."
+    },
+    {
+      "name": "session-cost-forensics",
+      "source": "./plugins/session-cost-forensics",
+      "description": "Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, and duplicate sessions."
+    },
     {
       "name": "session-memory-search",
       "source": "./plugins/session-memory-search",
       "description": "Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, and conversation snippets."
     },
     {
-      "name": "session-cost-forensics",
-      "source": "./plugins/session-cost-forensics",
-      "description": "Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, and duplicate sessions."
+      "name": "summarize",
+      "source": "./plugins/summarize",
+      "description": "Fetch a URL or convert a local file (PDF, DOCX, HTML, and more) into Markdown with markitdown, optionally summarizing it."
     }
   ]
 }

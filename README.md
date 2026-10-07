@@ -10,18 +10,27 @@ Each skill lives in its own plugin workspace under `plugins/` and ships as an in
 
 ## Security and privacy
 
-Both skills read local coding-agent session stores read-only (`~/.codex`, `~/.pi/agent/sessions`, `~/.claude/projects`, `~/.claude/history.jsonl`) and make **no network requests**. `session-memory-search` may shell out to a local `rg` (ripgrep) process for faster prefiltering; it does not talk to the network either.
+`session-memory-search` and `session-cost-forensics` read local coding-agent session stores read-only (`~/.codex`, `~/.pi/agent/sessions`, `~/.claude/projects`, `~/.claude/history.jsonl`) and make **no network requests**. The other skills are instruction-only except `summarize`, which fetches URLs and runs local tools (`uvx markitdown`, optionally `pi`); each plugin README states what it accesses. `session-memory-search` may shell out to a local `rg` (ripgrep) process for faster prefiltering; it does not talk to the network either.
 
 The scripts themselves make no network calls, but their output is returned to the invoking agent like any other tool output, so it reaches that agent's model provider: `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project`/`--since` to keep other projects' sessions out of scope.
 
-Raw session transcripts, credentials, and any other private data read by these skills must never be committed to this repository or published in a package. See [SECURITY.md](SECURITY.md) for the full trust model and reporting process.
+Raw session transcripts, credentials, and any other private data read by the session skills must never be committed to this repository or published in a package. See [SECURITY.md](SECURITY.md) for the full trust model and reporting process.
 
 ## Skills
 
 | Skill | npm package | Version | Runtime | Purpose |
 |---|---|---|---|---|
-| [session-memory-search](plugins/session-memory-search/README.md) | `@ayagmar/session-memory-search` | [![npm](https://img.shields.io/npm/v/@ayagmar/session-memory-search)](https://www.npmjs.com/package/@ayagmar/session-memory-search) | Node.js >= 22.19, `rg` optional | Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, TODOs, and conversation snippets. |
+| [adversarial-plan-approval](plugins/adversarial-plan-approval/README.md) | `@ayagmar/adversarial-plan-approval` | [![npm](https://img.shields.io/npm/v/@ayagmar/adversarial-plan-approval)](https://www.npmjs.com/package/@ayagmar/adversarial-plan-approval) | Instruction-only | Independently falsify or approve implementation plans before execution with ACCEPT, MODIFY, or REJECT verdicts per task or decision gate. |
+| [advisor-executor-quality-loop](plugins/advisor-executor-quality-loop/README.md) | `@ayagmar/advisor-executor-quality-loop` | [![npm](https://img.shields.io/npm/v/@ayagmar/advisor-executor-quality-loop)](https://www.npmjs.com/package/@ayagmar/advisor-executor-quality-loop) | Instruction-only | Orchestrate complex multi-task work by separating advisor reasoning, delegated execution, and independent verification until tasks converge. |
+| [commit](plugins/commit/README.md) | `@ayagmar/commit` | [![npm](https://img.shields.io/npm/v/@ayagmar/commit)](https://www.npmjs.com/package/@ayagmar/commit) | Instruction-only | Create Conventional Commits safely, including logical commit stacks over mixed working trees and plan-traceable commit sequences. |
+| [engineering-optimization](plugins/engineering-optimization/README.md) | `@ayagmar/engineering-optimization` | [![npm](https://img.shields.io/npm/v/@ayagmar/engineering-optimization)](https://www.npmjs.com/package/@ayagmar/engineering-optimization) | Instruction-only | Improve performance, resource use, determinism, or simplicity through measurement, profiling, benchmarks, and proven equivalence. |
+| [implementation-plan-author](plugins/implementation-plan-author/README.md) | `@ayagmar/implementation-plan-author` | [![npm](https://img.shields.io/npm/v/@ayagmar/implementation-plan-author)](https://www.npmjs.com/package/@ayagmar/implementation-plan-author) | Instruction-only | Author self-contained implementation plans, multi-plan programs, or compact handoffs that a fresh agent can execute without conversational memory. |
+| [improve](plugins/improve/README.md) | `@ayagmar/improve` | [![npm](https://img.shields.io/npm/v/@ayagmar/improve)](https://www.npmjs.com/package/@ayagmar/improve) | Instruction-only | Survey a codebase as a senior advisor, report prioritized improvements, and implement selected fixes or produce handoff plans. |
+| [product-spec-foundry](plugins/product-spec-foundry/README.md) | `@ayagmar/product-spec-foundry` | [![npm](https://img.shields.io/npm/v/@ayagmar/product-spec-foundry)](https://www.npmjs.com/package/@ayagmar/product-spec-foundry) | Instruction-only | Turn a product idea, loose PRD, or inconsistent pre-implementation repository into an implementation-ready specification package. |
+| [release-readiness-certification](plugins/release-readiness-certification/README.md) | `@ayagmar/release-readiness-certification` | [![npm](https://img.shields.io/npm/v/@ayagmar/release-readiness-certification)](https://www.npmjs.com/package/@ayagmar/release-readiness-certification) | Instruction-only | Produce a strict evidence-based release verdict with severity-ranked findings, blockers, a pre-release work batch, and a deferred backlog. |
 | [session-cost-forensics](plugins/session-cost-forensics/README.md) | `@ayagmar/session-cost-forensics` | [![npm](https://img.shields.io/npm/v/@ayagmar/session-cost-forensics)](https://www.npmjs.com/package/@ayagmar/session-cost-forensics) | Node.js >= 22.19 | Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, duplicate sessions, and orchestration inefficiency. |
+| [session-memory-search](plugins/session-memory-search/README.md) | `@ayagmar/session-memory-search` | [![npm](https://img.shields.io/npm/v/@ayagmar/session-memory-search)](https://www.npmjs.com/package/@ayagmar/session-memory-search) | Node.js >= 22.19, `rg` optional | Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, TODOs, and conversation snippets. |
+| [summarize](plugins/summarize/README.md) | `@ayagmar/summarize` | [![npm](https://img.shields.io/npm/v/@ayagmar/summarize)](https://www.npmjs.com/package/@ayagmar/summarize) | Node.js >= 22.19, `uvx`; `pi` optional | Fetch a URL or convert a local file (PDF, DOCX, HTML, and more) into Markdown with markitdown, optionally summarizing it. |
 
 ## Install
 
@@ -91,6 +100,16 @@ npx skills add ayagmar/agents-skills --skill session-memory-search --agent curso
 | Pi | Pinned: `pi install npm:@ayagmar/session-memory-search@<new-version>`. Unpinned (`pi install npm:@ayagmar/session-memory-search`): `pi update npm:@ayagmar/session-memory-search` | `pi remove npm:@ayagmar/session-memory-search` (the `npm:` prefix is required — `pi remove @ayagmar/session-memory-search` is parsed as a local path and fails) |
 | Claude Code | `claude plugin marketplace update ayagmar-skills`, then `claude plugin update session-memory-search@ayagmar-skills` | `claude plugin uninstall session-memory-search@ayagmar-skills`, then `claude plugin marketplace remove ayagmar-skills` if you no longer need the marketplace |
 | Codex | `codex plugin marketplace upgrade ayagmar-skills`, then re-run `codex plugin add session-memory-search@ayagmar-skills` to pick up a new version | `codex plugin remove session-memory-search@ayagmar-skills`, then `codex plugin marketplace remove ayagmar-skills` if you no longer need the marketplace |
+
+## Skills I also use
+
+```bash
+npx skills add mitsuhiko/agent-stuff --skill librarian --agent claude-code --agent codex --agent pi -g
+npx skills add mattpocock/skills --skill grill-me --skill grilling --agent claude-code --agent codex --agent pi -g
+npx skills add pbakaus/impeccable --agent claude-code --agent codex --agent pi -g
+```
+
+These stay upstream (not copied here) so `npx skills update` keeps them current.
 
 ## Versioning and compatibility
 

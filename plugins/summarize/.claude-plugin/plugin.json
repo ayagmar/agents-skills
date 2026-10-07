@@ -1,0 +1,19 @@
+{
+  "name": "summarize",
+  "version": "0.0.0",
+  "description": "Fetch a URL or convert a local file (PDF, DOCX, HTML, and more) into Markdown with markitdown, optionally summarizing it.",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "repository": "https://github.com/ayagmar/agents-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "markdown",
+    "summarization"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "engineering-optimization",
+  "version": "0.0.0",
+  "description": "Improve performance, resource use, determinism, or simplicity through measurement, profiling, benchmarks, and proven equivalence.",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "repository": "https://github.com/ayagmar/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "optimization",
+    "benchmarking"
+  ]
+}

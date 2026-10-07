@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Each skill package (`@ayagmar/session-memory-search`, `@ayagmar/session-cost-forensics`) is versioned and supported independently. Only the latest release of each package receives fixes. While a package is on a `0.x` line, only the latest `0.x` minor receives fixes; there is no backport policy across `0.x` minors.
+Each package under `plugins/` (published as `@ayagmar/<name>`) is versioned and supported independently. Only the latest release of each package receives fixes. While a package is on a `0.x` line, only the latest `0.x` minor receives fixes; there is no backport policy across `0.x` minors.
 
 ## Reporting a vulnerability
 
@@ -16,20 +16,24 @@ Skills and their bundled scripts run with the installing user's own permissions 
 
 ## What each skill accesses
 
-Both skills open local session stores **read-only**:
+The session skills (`session-memory-search` and `session-cost-forensics`) open local session stores **read-only**:
 
 - `~/.codex` (Codex session logs)
 - `~/.pi/agent/sessions` (Pi session logs)
 - `~/.claude/projects` (Claude Code session logs)
 - `~/.claude/history.jsonl` (Claude Code prompt index; named by `session-cost-forensics` as a reference source)
 
-Neither skill writes to these directories. `session-memory-search` may additionally spawn a local `rg` (ripgrep) subprocess to prefilter files faster; it reads the same local paths and performs no network I/O.
+Neither session skill writes to these directories. `session-memory-search` may additionally spawn a local `rg` (ripgrep) subprocess to prefilter files faster; it reads the same local paths and performs no network I/O.
 
 The scripts themselves make no network calls, but their output is returned to the invoking agent like any other tool output, so it reaches that agent's model provider: `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project`/`--since` to keep other projects' sessions out of scope.
 
+## Other skills
+
+`summarize` fetches URLs you give it and runs local tools (`uvx markitdown`, and `pi` for the optional summary); its output reaches your agent's model provider. The remaining skills (`adversarial-plan-approval`, `advisor-executor-quality-loop`, `commit`, `engineering-optimization`, `implementation-plan-author`, `improve`, `product-spec-foundry`, `release-readiness-certification`) are instruction-only and ship no scripts.
+
 ## No-network guarantee
 
-The initial versions of both skills make no network requests. The control is human review of every script change (the PR template checkbox and CODEOWNERS require it), not an automated gate. A quick first check:
+The initial versions of the two session skills make no network requests. This guarantee covers the session skills only. The control is human review of every script change (the PR template checkbox and CODEOWNERS require it), not an automated gate. A quick first check:
 
 ```bash
 rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)" plugins/*/skills/*/scripts
