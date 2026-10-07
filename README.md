@@ -107,6 +107,9 @@ npx skills add ayagmar/agents-skills --skill session-memory-search --agent curso
 npx skills add mitsuhiko/agent-stuff --skill librarian --agent claude-code --agent codex --agent pi -g
 npx skills add mattpocock/skills --skill grill-me --skill grilling --agent claude-code --agent codex --agent pi -g
 npx skills add pbakaus/impeccable --agent claude-code --agent codex --agent pi -g
+npx skills add anthropics/skills --skill frontend-design --agent claude-code --agent codex --agent pi -g
+npx skills add blader/humanizer --agent claude-code --agent codex --agent pi -g
+npx skills add herdrdev/herdr --skill herdr --agent claude-code --agent codex --agent pi -g
 ```
 
 These stay upstream (not copied here) so `npx skills update` keeps them current.
