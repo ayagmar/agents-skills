@@ -16,7 +16,7 @@ Do not assume delegation is desirable. Plans are the product only when the user 
 
 Pick the single mode matching the request (keywords in the invocation select it; bare invocation = `fresh-audit`):
 
-- `survey` — light recon + top findings only; a map, not a deep audit. (Equivalent to `quick`.)
+- `survey` — light recon + top findings only; a map, not a deep audit.
 - `fresh-audit` — full workflow below, trusting nothing prior: no previous report, plan status, DONE label, or completion claim counts as evidence; re-verify against live code.
 - `challenge` — adversarially re-examine an existing report, audit, or claim set: confirm, downgrade, or refute each item against live source. Supports independent finder/challenger convergence — when the user wants two passes, the challenger works from the artifact plus live code only, never from the finder's session.
 - `reconcile` — process plan/backlog state changes; see [references/closing-the-loop.md](references/closing-the-loop.md).
