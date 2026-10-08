@@ -1,6 +1,6 @@
 {
   "name": "@ayagmar/commit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create Conventional Commits safely, including logical commit stacks over mixed working trees and plan-traceable commit sequences.",
   "keywords": [
     "agent-skills",

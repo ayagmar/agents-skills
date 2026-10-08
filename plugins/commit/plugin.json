@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "commit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create Conventional Commits safely, including logical commit stacks over mixed working trees and plan-traceable commit sequences.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

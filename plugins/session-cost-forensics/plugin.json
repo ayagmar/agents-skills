@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "session-cost-forensics",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, and duplicate sessions.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

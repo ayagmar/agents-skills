@@ -1,6 +1,6 @@
 {
   "name": "improve",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Survey a codebase as a senior advisor, report prioritized improvements, and implement selected fixes or produce handoff plans.",
   "author": {
     "name": "Abdeslam Yassine Agmar",
