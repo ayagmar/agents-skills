@@ -1,5 +1,11 @@
 # @ayagmar/summarize
 
+## 0.1.2
+
+### Patch Changes
+
+- f950cf7: README: give every skill a real prompt example and pin installs with `@<version>`.
+
 ## 0.1.1
 
 ### Patch Changes

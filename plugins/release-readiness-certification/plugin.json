@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "release-readiness-certification",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Produce a strict evidence-based release verdict with severity-ranked findings, blockers, a pre-release work batch, and a deferred backlog.",
   "author": {
     "name": "Abdeslam Yassine Agmar",
