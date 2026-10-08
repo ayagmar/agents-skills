@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "summarize",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fetch a URL or convert a local file (PDF, DOCX, HTML, and more) into Markdown with markitdown, optionally summarizing it.",
   "author": {
     "name": "Abdeslam Yassine Agmar",
