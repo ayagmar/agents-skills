@@ -11,8 +11,8 @@ Audit a codebase and implement or plan prioritized improvements. Privacy: instru
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/improve@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/improve@<version>
 
 # unpinned
 pi install npm:@ayagmar/improve
@@ -45,7 +45,7 @@ codex plugin add improve@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use improve to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/improve/SKILL.md) for the full workflow.
+Prompt example: "Audit this repo and list the highest-value improvements." The agent loads the skill when your request matches its description. See [SKILL.md](skills/improve/SKILL.md) for the full workflow.
 
 ## Credits
 

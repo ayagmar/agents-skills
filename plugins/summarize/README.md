@@ -13,8 +13,8 @@ Convert a URL or local document into Markdown and optionally summarize it. Priva
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/summarize@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/summarize@<version>
 
 # unpinned
 pi install npm:@ayagmar/summarize

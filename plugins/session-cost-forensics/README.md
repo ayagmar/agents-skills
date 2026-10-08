@@ -11,8 +11,8 @@ Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cac
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/session-cost-forensics@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/session-cost-forensics@<version>
 
 # unpinned
 pi install npm:@ayagmar/session-cost-forensics

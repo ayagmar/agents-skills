@@ -11,8 +11,8 @@ Turn a product idea or loose PRD into an implementation-ready spec package. Priv
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/product-spec-foundry@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/product-spec-foundry@<version>
 
 # unpinned
 pi install npm:@ayagmar/product-spec-foundry
@@ -45,7 +45,7 @@ codex plugin add product-spec-foundry@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use product-spec-foundry to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/product-spec-foundry/SKILL.md) for the full workflow.
+Prompt example: "Turn this PRD draft into an implementation-ready spec with user journeys, acceptance criteria, and an API contract." The agent loads the skill when your request matches its description. See [SKILL.md](skills/product-spec-foundry/SKILL.md) for the full workflow.
 
 ## Links
 

@@ -11,8 +11,8 @@ Orchestrate multi-task work with delegated execution and independent verificatio
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/advisor-executor-quality-loop@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/advisor-executor-quality-loop@<version>
 
 # unpinned
 pi install npm:@ayagmar/advisor-executor-quality-loop
@@ -45,7 +45,7 @@ codex plugin add advisor-executor-quality-loop@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use advisor-executor-quality-loop to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/advisor-executor-quality-loop/SKILL.md) for the full workflow.
+Prompt example: "Split this migration into tasks, hand them to subagents, and check each one yourself before calling it done." The agent loads the skill when your request matches its description. See [SKILL.md](skills/advisor-executor-quality-loop/SKILL.md) for the full workflow.
 
 ## Links
 

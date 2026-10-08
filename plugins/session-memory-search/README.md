@@ -5,15 +5,15 @@ Search local Codex, Pi, and Claude Code session history to recover prior decisio
 ## Requirements
 
 - Node.js >= 22.19
-- `rg` (ripgrep) — optional, used for faster prefiltering
+- `rg` (ripgrep), optional, for faster prefiltering
 
 ## Install
 
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/session-memory-search@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/session-memory-search@<version>
 
 # unpinned
 pi install npm:@ayagmar/session-memory-search
