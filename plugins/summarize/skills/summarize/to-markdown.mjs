@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Convert a URL or local file to Markdown using `uvx markitdown`.
- * Optionally summarize the produced Markdown via `pi` (openai-codex/gpt-5.4:medium).
+ * Optionally summarize the produced Markdown via `pi` (openai-codex/gpt-6-luna:medium).
  *
  * Note: `markitdown` can fetch URLs on its own; this script mainly adds:
  *   - optional writing to a temp file / specific output path
@@ -181,7 +181,7 @@ ${body}
 --- END DOCUMENT ---`;
 
   const result = spawnSync('pi', [
-    '--model', 'openai-codex/gpt-5.4:medium',
+    '--model', 'openai-codex/gpt-6-luna:medium',
     '--no-tools',
     '--no-session',
     '-p',

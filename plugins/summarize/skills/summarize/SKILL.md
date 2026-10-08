@@ -40,7 +40,7 @@ Write Markdown to a specific file:
 uvx markitdown <url-or-path> > /tmp/doc.md
 ```
 
-### Convert + summarize with GPT-5.4 medium (pass context!)
+### Convert + summarize with GPT-6 Luna medium (pass context!)
 
 Summaries are only useful when you provide **what you want extracted** and the **audience/purpose**.
 
@@ -57,4 +57,4 @@ node to-markdown.mjs <url-or-path> --summary --prompt "Focus on security implica
 This will:
 1) convert to Markdown via `uvx markitdown`
 2) write the full Markdown to a temp `.md` file and print its path as a "Hint" line
-3) run `pi --model openai-codex/gpt-5.4:medium` (no-tools, no-session) to summarize using your extra prompt
+3) run `pi --model openai-codex/gpt-6-luna:medium` (no-tools, no-session) to summarize using your extra prompt
