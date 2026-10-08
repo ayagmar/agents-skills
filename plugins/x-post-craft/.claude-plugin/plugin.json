@@ -1,0 +1,20 @@
+{
+  "name": "x-post-craft",
+  "version": "0.0.0",
+  "description": "Write and review X/Twitter posts and threads using the reach mechanics of X's open-source recommendation stack.",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "repository": "https://github.com/ayagmar/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "twitter",
+    "x",
+    "writing"
+  ]
+}

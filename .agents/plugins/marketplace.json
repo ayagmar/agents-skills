@@ -124,6 +124,17 @@
         "installation": "AVAILABLE"
       },
       "category": "Developer Tools"
+    },
+    {
+      "name": "x-post-craft",
+      "source": {
+        "source": "local",
+        "path": "./plugins/x-post-craft"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
     }
   ]
 }

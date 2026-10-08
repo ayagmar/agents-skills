@@ -4,7 +4,7 @@
     "name": "Abdeslam Yassine Agmar",
     "url": "https://github.com/ayagmar"
   },
-  "description": "Catalog of agent skills for planning and review workflows, commits, document summarization, and local session history search and cost forensics.",
+  "description": "Catalog of agent skills for planning and review workflows, commits, document summarization, local session history search and cost forensics, and X/Twitter post writing.",
   "plugins": [
     {
       "name": "adversarial-plan-approval",
@@ -60,6 +60,11 @@
       "name": "summarize",
       "source": "./plugins/summarize",
       "description": "Fetch a URL or convert a local file (PDF, DOCX, HTML, and more) into Markdown with markitdown, optionally summarizing it."
+    },
+    {
+      "name": "x-post-craft",
+      "source": "./plugins/x-post-craft",
+      "description": "Write and review X/Twitter posts and threads using the reach mechanics of X's open-source recommendation stack."
     }
   ]
 }
