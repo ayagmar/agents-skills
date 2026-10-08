@@ -1,0 +1,47 @@
+{
+  "name": "@ayagmar/x-post-craft",
+  "version": "0.0.0",
+  "description": "Write and review X/Twitter posts and threads using the reach mechanics of X's open-source recommendation stack.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "twitter",
+    "x",
+    "writing"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/x-post-craft#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/x-post-craft"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}
