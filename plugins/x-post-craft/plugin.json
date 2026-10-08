@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "x-post-craft",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Write and review X/Twitter posts and threads using the reach mechanics of X's open-source recommendation stack.",
   "author": {
     "name": "Abdeslam Yassine Agmar",
