@@ -11,8 +11,8 @@ Optimize by measurement: profile, benchmark, and verify equivalence. Privacy: in
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/engineering-optimization@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/engineering-optimization@<version>
 
 # unpinned
 pi install npm:@ayagmar/engineering-optimization
@@ -45,7 +45,7 @@ codex plugin add engineering-optimization@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use engineering-optimization to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/engineering-optimization/SKILL.md) for the full workflow.
+Prompt example: "Profile the CSV import and make it faster without changing its output." The agent loads the skill when your request matches its description. See [SKILL.md](skills/engineering-optimization/SKILL.md) for the full workflow.
 
 ## Links
 

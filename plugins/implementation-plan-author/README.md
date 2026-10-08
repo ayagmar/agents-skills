@@ -11,8 +11,8 @@ Author self-contained implementation plans, programs, or handoffs. Privacy: inst
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/implementation-plan-author@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/implementation-plan-author@<version>
 
 # unpinned
 pi install npm:@ayagmar/implementation-plan-author
@@ -45,7 +45,7 @@ codex plugin add implementation-plan-author@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use implementation-plan-author to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/implementation-plan-author/SKILL.md) for the full workflow.
+Prompt example: "Write a plan for adding rate limiting to the API that a fresh agent could execute." The agent loads the skill when your request matches its description. See [SKILL.md](skills/implementation-plan-author/SKILL.md) for the full workflow.
 
 ## Links
 

@@ -11,8 +11,8 @@ Review, challenge, or approve an implementation plan before work starts. Privacy
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/adversarial-plan-approval@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/adversarial-plan-approval@<version>
 
 # unpinned
 pi install npm:@ayagmar/adversarial-plan-approval
@@ -45,7 +45,7 @@ codex plugin add adversarial-plan-approval@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use adversarial-plan-approval to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/adversarial-plan-approval/SKILL.md) for the full workflow.
+Prompt example: "Review plans/003-retry-policy.md before we start and give me ACCEPT, MODIFY, or REJECT for each task." The agent loads the skill when your request matches its description. See [SKILL.md](skills/adversarial-plan-approval/SKILL.md) for the full workflow.
 
 ## Links
 

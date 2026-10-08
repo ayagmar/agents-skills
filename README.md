@@ -1,18 +1,16 @@
 # agents-skills
 
-Versioned, cross-agent [Agent Skills](https://agentskills.io/specification) for Pi, Claude Code, Codex, and Cursor, with selective per-skill installation.
-
-> **Status**: no package has been published to npm yet; the first release will be `0.1.0` via [Changesets](https://github.com/changesets/changesets). Until then, the Pi npm install commands below do not work, but the skills CLI, Claude, and Codex installs from this repository do.
+Versioned [Agent Skills](https://agentskills.io/specification) for Pi, Claude Code, Codex, and Cursor.
 
 ## What's here
 
-Each skill lives in its own plugin workspace under `plugins/` and ships as an independent npm package, so you install only the skill you want, not the whole collection.
+Each skill lives in its own plugin workspace under `plugins/` and ships as its own npm package, so you can install one skill without the others.
 
 ## Security and privacy
 
-`session-memory-search` and `session-cost-forensics` read local coding-agent session stores read-only (`~/.codex`, `~/.pi/agent/sessions`, `~/.claude/projects`, `~/.claude/history.jsonl`) and make **no network requests**. The other skills are instruction-only except `summarize`, which fetches URLs and runs local tools (`uvx markitdown`, optionally `pi`); each plugin README states what it accesses. `session-memory-search` may shell out to a local `rg` (ripgrep) process for faster prefiltering; it does not talk to the network either.
+`session-memory-search` and `session-cost-forensics` read local coding-agent session stores (`~/.codex`, `~/.pi/agent/sessions`, `~/.claude/projects`, `~/.claude/history.jsonl`) without writing to them, and make no network requests. `session-memory-search` may also run a local `rg` (ripgrep) process to prefilter files faster. `summarize` fetches the URLs you give it and runs local tools (`uvx markitdown`, and optionally `pi`). The other skills are instructions only. Each plugin README states what it accesses.
 
-The scripts themselves make no network calls, but their output is returned to the invoking agent like any other tool output, so it reaches that agent's model provider: `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project`/`--since` to keep other projects' sessions out of scope.
+Script output goes back to the invoking agent like any other tool output, so it reaches that agent's model provider. `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project` and `--since` to keep other projects' sessions out of scope.
 
 Raw session transcripts, credentials, and any other private data read by the session skills must never be committed to this repository or published in a package. See [SECURITY.md](SECURITY.md) for the full trust model and reporting process.
 
@@ -56,13 +54,13 @@ npx skills add ayagmar/agents-skills --skill session-memory-search --agent pi -g
 
 ### Pi (npm)
 
-Install an exact version directly from npm:
+Install an exact version from npm (versions are listed in each plugin's `CHANGELOG.md` and on its npm page):
 
 ```bash
-pi install npm:@ayagmar/session-memory-search@0.1.0
+pi install npm:@ayagmar/session-memory-search@<version>
 ```
 
-**Do not** `pi install` the repository root or its git URL (for example `pi install git:github.com/ayagmar/agents-skills`). The repo root has no Pi extension manifest, so Pi treats it as a broken extension and fails to start. One npm package equals one skill — always install the plugin package you want by name.
+**Do not** `pi install` the repository root or its git URL (for example `pi install git:github.com/ayagmar/agents-skills`). The repo root has no Pi extension manifest, so Pi treats it as a broken extension and fails to start. Each npm package holds one skill, so install the plugin package you want by name.
 
 ### Claude Code
 
@@ -97,7 +95,7 @@ npx skills add ayagmar/agents-skills --skill session-memory-search --agent curso
 | Installer | Update | Uninstall |
 |---|---|---|
 | skills CLI | `npx skills update` (or `npx skills update session-memory-search`) | `npx skills remove session-memory-search` (add `-g` if you installed with `-g`) |
-| Pi | Pinned: `pi install npm:@ayagmar/session-memory-search@<new-version>`. Unpinned (`pi install npm:@ayagmar/session-memory-search`): `pi update npm:@ayagmar/session-memory-search` | `pi remove npm:@ayagmar/session-memory-search` (the `npm:` prefix is required — `pi remove @ayagmar/session-memory-search` is parsed as a local path and fails) |
+| Pi | Pinned: `pi install npm:@ayagmar/session-memory-search@<new-version>`. Unpinned (`pi install npm:@ayagmar/session-memory-search`): `pi update npm:@ayagmar/session-memory-search` | `pi remove npm:@ayagmar/session-memory-search` (keep the `npm:` prefix: without it, Pi parses the name as a local path and fails) |
 | Claude Code | `claude plugin marketplace update ayagmar-skills`, then `claude plugin update session-memory-search@ayagmar-skills` | `claude plugin uninstall session-memory-search@ayagmar-skills`, then `claude plugin marketplace remove ayagmar-skills` if you no longer need the marketplace |
 | Codex | `codex plugin marketplace upgrade ayagmar-skills`, then re-run `codex plugin add session-memory-search@ayagmar-skills` to pick up a new version | `codex plugin remove session-memory-search@ayagmar-skills`, then `codex plugin marketplace remove ayagmar-skills` if you no longer need the marketplace |
 
@@ -112,7 +110,7 @@ npx skills add blader/humanizer --agent claude-code --agent codex --agent pi -g
 npx skills add herdrdev/herdr --skill herdr --agent claude-code --agent codex --agent pi -g
 ```
 
-These stay upstream (not copied here) so `npx skills update` keeps them current.
+They are installed from their upstream repositories, not copied here, so `npx skills update` keeps them current.
 
 ## Versioning and compatibility
 
@@ -122,13 +120,13 @@ Each skill package is versioned independently with SemVer:
 - **Minor**: new CLI option, provider support, new documented output field, or a compatible workflow capability.
 - **Major**: skill rename, removed/renamed option, incompatible output/schema, changed privacy boundary, or a new required external service.
 
-Every changed workspace is covered by a [Changeset](https://github.com/changesets/changesets), and every version published by the release workflow has npm provenance and a matching Git tag / GitHub release (the first publish of each package is a one-time manual bootstrap — see [CONTRIBUTING.md](CONTRIBUTING.md)).
+Every changed workspace is covered by a [Changeset](https://github.com/changesets/changesets). Every version the release workflow publishes has npm provenance, a matching Git tag, and a GitHub release. The first publish of each new package is done once by hand; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 How each installer tracks versions:
 
 - Claude and Codex plugin manifest versions (`plugin.json`) identify the installed component version and follow the npm package version.
-- Both marketplace catalogs (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`) follow the repository's default branch — installing "latest" from a marketplace means "latest on the default branch", not necessarily the newest npm release.
-- The `skills` CLI installs from Git and tracks source revisions through its own lock file — `skills-lock.json` in the project; `.skill-lock.json` under `$XDG_STATE_HOME/skills/` or `~/.agents/` for `-g` installs. It is not the npm version authority. Use the Pi npm installer when you need to pin an exact release.
+- Both marketplace catalogs (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`) follow the repository's default branch, so installing "latest" from a marketplace gives you the default branch, which can be ahead of the newest npm release.
+- The `skills` CLI installs from Git and tracks source revisions in its own lock file: `skills-lock.json` in the project, or `.skill-lock.json` under `$XDG_STATE_HOME/skills/` or `~/.agents/` for `-g` installs. Those revisions are Git commits, not npm versions. Use the Pi npm installer when you need to pin an exact release.
 
 ## Development
 
@@ -147,9 +145,9 @@ agents-skills/
 ├── plugins/          # one directory per plugin, one skill per plugin
 ├── schemas/          # vendored Agent Plugins JSON Schema (schema stage)
 ├── scripts/          # validation, sync, and smoke-install tooling
-├── .claude-plugin/    # Claude marketplace catalog
-├── .agents/           # Codex marketplace catalog
-└── .github/           # PR template, CODEOWNERS, workflows
+├── .claude-plugin/   # Claude marketplace catalog
+├── .agents/          # Codex marketplace catalog
+└── .github/          # PR template, CODEOWNERS, workflows
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add or change a skill, and [SECURITY.md](SECURITY.md) for the trust model and how to report a vulnerability.

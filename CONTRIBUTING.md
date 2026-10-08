@@ -18,9 +18,9 @@ plugins/<name>/
 └── CHANGELOG.md                 # added by the first Changeset release, not by hand
 ```
 
-`plugins/<name>/` may only contain the entries above (`package.json`, `plugin.json`, `.claude-plugin`, `skills`, `README.md`, `LICENSE`, `CHANGELOG.md`) — Codex copies the whole plugin directory when it installs, so anything else ships to users. `plugins/<name>/skills/` must contain exactly one directory, and its name must equal `<name>`: Pi loads every loose file with a `description` frontmatter as an extra skill, and one plugin exposing more than one skill is a layout error.
+`plugins/<name>/` may only contain the entries above (`package.json`, `plugin.json`, `.claude-plugin`, `skills`, `README.md`, `LICENSE`, `CHANGELOG.md`). Codex copies the whole plugin directory when it installs, so anything else would ship to users. `plugins/<name>/skills/` must contain exactly one directory, and its name must equal `<name>`: Pi loads every loose file with a `description` frontmatter as an extra skill, and one plugin exposing more than one skill is a layout error.
 
-`plugins/<name>/plugin.json` must declare `"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"` exactly — without it, Codex silently falls back to `.claude-plugin/plugin.json` and drift goes unnoticed. Both `plugin.json` and `.claude-plugin/plugin.json` must have `name` equal to `<name>`, and `package.json`'s `name` must be `@ayagmar/<name>`.
+`plugins/<name>/plugin.json` must declare `"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"` exactly. Without it, Codex silently falls back to `.claude-plugin/plugin.json` and drift goes unnoticed. Both `plugin.json` and `.claude-plugin/plugin.json` must have `name` equal to `<name>`, and `package.json`'s `name` must be `@ayagmar/<name>`.
 
 ### Register the plugin in both catalogs
 
@@ -35,7 +35,7 @@ Start a new plugin at `0.0.0` in `package.json`, `plugin.json` and `.claude-plug
 
 ## SKILL.md frontmatter rules
 
-Agent Skills frontmatter only allows these keys: `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`. Any other key (including `version` or `metadata.version`) is rejected — `package.json` is the only source of truth for version numbers. Provider-only metadata (for example something Codex-specific) goes in `agents/openai.yaml` next to the skill, not in the frontmatter.
+Agent Skills frontmatter only allows these keys: `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`. Any other key (including `version` or `metadata.version`) is rejected, because `package.json` is the only source of truth for version numbers. Provider-only metadata (for example something Codex-specific) goes in `agents/openai.yaml` next to the skill, not in the frontmatter.
 
 - `name`: lowercase letters, digits, and single hyphens only (`^[a-z0-9]+(-[a-z0-9]+)*$`), at most 64 characters, and equal to the skill directory name.
 - `description`: non-empty, at most 1024 characters.
@@ -51,7 +51,7 @@ Agent Skills frontmatter only allows these keys: `name`, `description`, `license
 
 ## One skill per plugin, one npm package per Pi package
 
-Each plugin ships exactly one skill and exactly one npm package. This keeps Pi's `pi install npm:@ayagmar/<name>` installing exactly one skill (Pi has no way to install a subset of an npm package or a subdirectory of a Git repo), keeps Claude/Codex plugin installs mapping 1:1 to a skill, and keeps `skills CLI --skill <name>` unambiguous. Do not add a second skill directory to an existing plugin, and do not put unrelated functionality behind flags in one skill's scripts.
+Each plugin ships exactly one skill and exactly one npm package. This keeps Pi's `pi install npm:@ayagmar/<name>` installing exactly one skill (Pi has no way to install a subset of an npm package or a subdirectory of a Git repo), keeps Claude/Codex plugin installs mapping 1:1 to a skill, and keeps `npx skills add ... --skill <name>` unambiguous. Do not add a second skill directory to an existing plugin, and do not put unrelated functionality behind flags in one skill's scripts.
 
 ## Changesets
 
@@ -71,7 +71,7 @@ Every changed workspace must be listed in a Changeset. One Changeset file may li
 
 ## Releasing
 
-Merging Changesets to main makes `.github/workflows/release.yml` open or update a `chore(release): version packages` PR (it runs `npm run version-packages`). That PR is created with `GITHUB_TOKEN`, so CI does not start on it automatically — run `gh workflow run ci.yml --ref changeset-release/main` (or close and reopen the PR) before merging. Merging it validates, packs, and publishes only the changed workspaces via npm trusted publishing with provenance, creating `@ayagmar/<name>@<version>` tags and GitHub releases.
+Merging Changesets to main makes `.github/workflows/release.yml` open or update a `chore(release): version packages` PR (it runs `npm run version-packages`). That PR is created with `GITHUB_TOKEN`, so CI does not start on it automatically. Run `gh workflow run ci.yml --ref changeset-release/main` (or close and reopen the PR) before merging. Merging it validates, packs, and publishes only the changed workspaces through npm trusted publishing with provenance, and creates `@ayagmar/<name>@<version>` tags and GitHub releases.
 
 Everything is skipped until the repository variable `NPM_PUBLISH_ENABLED` is `true`; the prerequisites are listed at the top of `release.yml`. npm only accepts a trusted publisher for a package that already exists, so the maintainer bootstraps each new package once by hand before the workflow can publish it.
 
@@ -103,7 +103,7 @@ Use synthetic, hand-written fixtures for tests and examples instead.
 Scripts under `plugins/<name>/skills/<name>/scripts/` are reviewed with extra care because they run with the installing user's permissions:
 
 - Prefer Node.js built-ins; a new runtime dependency needs a clear justification in the PR description.
-- No network access: scripts read local session stores only. `rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)"` over the script is a quick heuristic — it can miss bare `"https"`/`"net"`/`"dns"` imports, `require(...)`, `WebSocket`, or spawned tools like `curl`. Human review of every script change is the actual control.
-- Read-only access to session stores — scripts must not write to `~/.codex`, `~/.pi/agent/sessions`, or `~/.claude/projects`.
+- No network access: scripts read local session stores only. `rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)"` over the script is a quick heuristic. It can miss bare `"https"`/`"net"`/`"dns"` imports, `require(...)`, `WebSocket`, or spawned tools like `curl`. Human review of every script change is the actual control.
+- Read-only access to session stores: scripts must not write to `~/.codex`, `~/.pi/agent/sessions`, or `~/.claude/projects`.
 - No hard-coded user paths (`/home/<user>`, `/Users/<user>`, `C:\Users\...`); resolve paths from `os.homedir()` or environment variables.
 - `node --check <script>` must be clean; this is also enforced by the `syntax` validate stage.

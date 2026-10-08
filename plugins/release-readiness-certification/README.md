@@ -11,8 +11,8 @@ Certify a release with an evidence-based READY / NOT READY verdict. Privacy: ins
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/release-readiness-certification@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/release-readiness-certification@<version>
 
 # unpinned
 pi install npm:@ayagmar/release-readiness-certification
@@ -45,7 +45,7 @@ codex plugin add release-readiness-certification@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use release-readiness-certification to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/release-readiness-certification/SKILL.md) for the full workflow.
+Prompt example: "Is this package ready to publish to npm? Give me a release verdict and the blockers." The agent loads the skill when your request matches its description. See [SKILL.md](skills/release-readiness-certification/SKILL.md) for the full workflow.
 
 ## Links
 

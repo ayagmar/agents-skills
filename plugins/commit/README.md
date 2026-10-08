@@ -11,8 +11,8 @@ Create Conventional Commits without mixing or losing user work. Privacy: instruc
 ### Pi
 
 ```bash
-# pinned
-pi install npm:@ayagmar/commit@0.1.0
+# pinned (versions are listed in the changelog linked below)
+pi install npm:@ayagmar/commit@<version>
 
 # unpinned
 pi install npm:@ayagmar/commit
@@ -45,7 +45,7 @@ codex plugin add commit@ayagmar-skills
 
 ## Usage
 
-Prompt example: "Use commit to ...". The agent loads the skill when your request matches its description. See [SKILL.md](skills/commit/SKILL.md) for the full workflow.
+Prompt example: "Commit the parser fix and its test, and leave the unrelated config edits alone." The agent loads the skill when your request matches its description. See [SKILL.md](skills/commit/SKILL.md) for the full workflow.
 
 ## Credits
 

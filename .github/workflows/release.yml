@@ -163,7 +163,7 @@ jobs:
     needs: publish
     if: ${{ !cancelled() && needs.publish.outputs.published == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions: {}
     steps:
       - name: Check published versions
@@ -176,7 +176,7 @@ jobs:
             attempts=0
             until [ "$(npm view "$spec" version)" = "$version" ]; do
               attempts=$((attempts + 1))
-              if [ "$attempts" -ge 6 ]; then
+              if [ "$attempts" -ge 60 ]; then
                 echo "::error::$spec is not on npm"
                 exit 1
               fi
