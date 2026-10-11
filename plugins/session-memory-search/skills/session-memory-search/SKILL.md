@@ -20,6 +20,7 @@ Turn local session stores into a memory layer: search with the bundled script, v
      [--group-by-project] [--phrase|--any-term|--regex] \
      [--limit N] [--json] [--stats] "<query>"
    ```
+   Options may appear before or after the query; every non-flag token is query text.
    Fast by design: date pruning plus a ripgrep file prefilter narrows candidates, then JSONL is streamed with bounded line memory. Regex or non-ASCII queries fall back to a streamed full scan automatically; `--no-prefilter` forces it; `--stats` prints pruning/scan counters to stderr.
 3. Verify the top hit by opening the session file with `rg`/`sed -n` on the matched region — never load a whole multi-MB session when the snippet plus a targeted read answers the question.
 4. Answer with the winning session path, date, and the relevant memory. Distinguish what the user said from what the assistant concluded.

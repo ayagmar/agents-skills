@@ -43,7 +43,10 @@ function usage() {
   --include-latest                 include sessions modified in the last 15 minutes
   --no-prefilter                   force full scan (skip ripgrep prefilter)
   --stats                          print scan statistics to stderr
-  --json                           machine-readable output`,
+  --json                           machine-readable output
+
+  Options may appear before or after the query; every non-flag token is query
+  text, so multi-word queries stay intact anywhere in the command line.`,
   );
   process.exit(1);
 }
@@ -72,40 +75,49 @@ function parseArgs(argv) {
   };
 
   const parts = [...argv];
+  const queryParts = [];
+  const valueFlags = new Set([
+    "--provider", "--since", "--until", "--project",
+    "--limit", "--max-snippets", "--exclude-path",
+  ]);
   while (parts.length > 0) {
     const current = parts.shift();
     if (!current) continue;
-    if (!current.startsWith("--")) {
-      args.query = [current, ...parts].join(" ").trim();
-      break;
-    }
-    switch (current) {
-      case "--phrase": args.phrase = true; break;
-      case "--any-term": args.anyTerm = true; break;
-      case "--regex": args.regex = true; break;
-      case "--json": args.json = true; break;
-      case "--include-latest": args.includeLatest = true; break;
-      case "--include-subagents": args.includeSubagents = true; break;
-      case "--include-tool-output": args.includeToolOutput = true; break;
-      case "--authored": args.authored = true; break;
-      case "--group-by-project": args.groupByProject = true; break;
-      case "--no-prefilter": args.noPrefilter = true; break;
-      case "--stats": args.stats = true; break;
-      case "--provider": args.provider = parts.shift() || ""; break;
-      case "--since": args.since = parts.shift() || null; break;
-      case "--until": args.until = parts.shift() || null; break;
-      case "--project": args.project = parts.shift() || null; break;
-      case "--limit": args.limit = Number(parts.shift() || "10"); break;
-      case "--max-snippets": args.maxSnippets = Number(parts.shift() || "3"); break;
-      case "--exclude-path": {
-        const p = parts.shift() || "";
-        if (!p) usage();
-        args.excludePaths.push(path.resolve(p));
-        break;
+    if (current.startsWith("--")) {
+      // Flags are recognized anywhere, before or after the query.
+      // Unknown --tokens still error, so a misspelled flag is not
+      // silently searched for as literal text.
+      const value = valueFlags.has(current) ? parts.shift() || "" : null;
+      switch (current) {
+        case "--phrase": args.phrase = true; break;
+        case "--any-term": args.anyTerm = true; break;
+        case "--regex": args.regex = true; break;
+        case "--json": args.json = true; break;
+        case "--include-latest": args.includeLatest = true; break;
+        case "--include-subagents": args.includeSubagents = true; break;
+        case "--include-tool-output": args.includeToolOutput = true; break;
+        case "--authored": args.authored = true; break;
+        case "--group-by-project": args.groupByProject = true; break;
+        case "--no-prefilter": args.noPrefilter = true; break;
+        case "--stats": args.stats = true; break;
+        case "--provider": args.provider = value; break;
+        case "--since": args.since = value || null; break;
+        case "--until": args.until = value || null; break;
+        case "--project": args.project = value || null; break;
+        case "--limit": args.limit = Number(value || "10"); break;
+        case "--max-snippets": args.maxSnippets = Number(value || "3"); break;
+        case "--exclude-path": {
+          if (!value) usage();
+          args.excludePaths.push(path.resolve(value));
+          break;
+        }
+        default: usage();
       }
-      default: usage();
+    } else {
+      queryParts.push(current);
     }
   }
+  args.query = queryParts.join(" ").trim();
 
   if (!PROVIDERS.includes(args.provider)) usage();
   if (!args.query) usage();
