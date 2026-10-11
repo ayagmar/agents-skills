@@ -71,6 +71,17 @@
       "category": "Developer Tools"
     },
     {
+      "name": "no-slop",
+      "source": {
+        "source": "local",
+        "path": "./plugins/no-slop"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "product-spec-foundry",
       "source": {
         "source": "local",

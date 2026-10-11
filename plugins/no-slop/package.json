@@ -1,0 +1,47 @@
+{
+  "name": "@ayagmar/no-slop",
+  "version": "0.0.0",
+  "description": "Write, edit, or audit READMEs, docs, landing pages, and other prose so it reads like a person wrote it, without AI-writing patterns.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "writing",
+    "editing",
+    "docs"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/no-slop#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/no-slop"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}
