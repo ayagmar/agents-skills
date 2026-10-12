@@ -18,7 +18,7 @@ Data sources (local defaults):
 ## Workflow
 
 1. Scope first: date window, provider(s), and project filter. Never aggregate the whole history when the question is about one project or week.
-2. Run the aggregator:
+2. Run the aggregator (`scripts/` is relative to this skill's directory):
    ```bash
    node scripts/session_cost_report.mjs --provider all --since YYYY-MM-DD --until YYYY-MM-DD [--project SUBSTR] [--include-subagents] [--top N] [--json]
    ```
@@ -30,7 +30,7 @@ Data sources (local defaults):
 ## Rules
 
 - Distinguish measured facts (token counts, cost fields, timestamps) from inference (why the waste happened). Label both.
-- Cite exact session paths and timestamps for every finding.
+- Cite the full session path (not shortened with `...`, so the user can open it) and timestamp for every finding, including the Pi and Codex ones.
 - Never expose secrets or sensitive transcript content; the script emits only metadata, counts, and hashed prompt fingerprints — keep manual inspection to the same standard.
 - Pi is the only store with recorded dollar cost; for Codex/Claude report tokens and, only if asked, estimate cost with clearly labeled assumed rates.
 - This skill analyzes efficiency. For "what did we discuss/decide", use `session-memory-search` instead.

@@ -27,7 +27,7 @@ Two tests decide every sentence:
 | names a file to fix | **File** | write only the final prose to the file, then a short summary |
 | another task needs prose (PR body, commit message, doc section, reply) | **Embedded** | only the final text |
 
-In Detect, name patterns only: no rewrite, no score, no verdict on who wrote it. Detectors guess; named patterns are evidence the user can check.
+In Detect, name patterns only: no rewrite, no score, no verdict on who wrote it. When asked whether a text reads as AI, open with the findings, not a yes or no; "it reads like a bot wrote it" is a verdict too. Detectors guess; named patterns are evidence the user can check.
 
 If the job is Edit or File and there is no draft, ask for it. If the reader or the goal is unclear and it changes the text, ask one question: who is this for, and what should they think or do after reading it?
 

@@ -137,18 +137,21 @@ npm ci && npm run validate
 
 Use Node 24 (`.nvmrc`); the pinned dev tooling installs only on Node ^22.20, 24, or >=26 (`engine-strict`).
 
-`validate` runs nine stages in order: `layout`, `versions`, `links`, `syntax`, `schema`, `skills`, `claude`, `packages`, `smoke`. Run a single stage with `node scripts/validate.mjs <stage>`. The `skills` stage requires [GitHub CLI](https://cli.github.com) >= 2.90 on `PATH` (`gh skill publish --dry-run`); every other host CLI comes pinned from `devDependencies`. All smoke installs run against throwaway `HOME`/config directories, never your real ones.
+`validate` runs ten stages in order: `layout`, `versions`, `links`, `syntax`, `schema`, `skills`, `claude`, `evals`, `packages`, `smoke`. Run a single stage with `node scripts/validate.mjs <stage>`. The `skills` stage requires [GitHub CLI](https://cli.github.com) >= 2.90 on `PATH` (`gh skill publish --dry-run`); every other host CLI comes pinned from `devDependencies`. All smoke installs run against throwaway `HOME`/config directories, never your real ones.
 
 Repository layout:
 
 ```
 agents-skills/
 ├── plugins/          # one directory per plugin, one skill per plugin
+├── evals/            # one eval suite per plugin (claude plugin eval)
 ├── schemas/          # vendored Agent Plugins JSON Schema (schema stage)
 ├── scripts/          # validation, sync, and smoke-install tooling
 ├── .claude-plugin/   # Claude marketplace catalog
 ├── .agents/          # Codex marketplace catalog
 └── .github/          # PR template, CODEOWNERS, workflows
 ```
+
+Every skill has an eval suite under `evals/` that checks it fires on the right prompts, stays quiet on near misses, and follows its own rules once loaded. `validate` only checks that the suites load; running them calls a model. See [evals/README.md](evals/README.md).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add or change a skill, and [SECURITY.md](SECURITY.md) for the trust model and how to report a vulnerability.

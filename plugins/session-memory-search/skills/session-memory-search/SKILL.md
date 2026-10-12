@@ -1,6 +1,6 @@
 ---
 name: session-memory-search
-description: Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, TODOs, and conversation snippets from `~/.codex`, `~/.pi/agent/sessions`, and `~/.claude/projects`. Use when the user asks what was discussed or decided before, which session contained a topic, what feedback was given, or wants past sessions mined for repeated workflows or skill candidates. Not for cost/token analysis (session-cost-forensics).
+description: Search local Codex, Pi, and Claude Code session history to recover prior decisions, feedback, prompts, TODOs, and conversation snippets from `~/.codex`, `~/.pi/agent/sessions`, and `~/.claude/projects`. Use when the user asks what was discussed or decided before, which session contained a topic (including picking the right one out of pasted search hits), what feedback was given, or wants past sessions mined for repeated workflows or skill candidates. Not for cost/token analysis (session-cost-forensics).
 license: MIT
 compatibility: Requires Node.js 22.19+; ripgrep (rg) is optional for faster search. Reads local Codex (~/.codex), Pi (~/.pi/agent/sessions), and Claude Code (~/.claude/projects) session stores.
 ---
@@ -12,7 +12,7 @@ Turn local session stores into a memory layer: search with the bundled script, v
 ## Workflow
 
 1. Start with 2–5 concrete keywords; add `--phrase` when wording/filenames are exact.
-2. Run `scripts/search_sessions.mjs` with the narrowest useful filters:
+2. Run `scripts/search_sessions.mjs` (relative to this skill's directory) with the narrowest useful filters:
    ```bash
    node scripts/search_sessions.mjs [--provider all|codex|pi|claude] \
      [--since YYYY-MM-DD] [--until YYYY-MM-DD] [--project SUBSTR] \

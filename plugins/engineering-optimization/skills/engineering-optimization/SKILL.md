@@ -1,6 +1,6 @@
 ---
 name: engineering-optimization
-description: Improve performance, resource use, determinism, or simplicity through measurement and proven equivalence — profiling, targeted optimization, architecture decision benchmarks, and regression verification. Use when asked to make something faster/lighter, profile a workload, benchmark competing designs, or verify an optimization. Not for speculative refactors, generic audits (improve), or feature work.
+description: Make slow or heavy code faster or lighter by measuring before and after and proving the output is unchanged; also profiling, decision benchmarks between competing designs, and re-verifying past optimizations. Use when a job, endpoint, build, or query is too slow, regressed, or misses its time or memory budget and the user wants it back under budget; when asked where the time goes; when a team must choose between designs, libraries, or formats on performance grounds and wants a fair way to decide; or to check an optimization still holds. Not for speculative refactors, readability cleanups, generic audits (improve), or feature work.
 license: MIT
 ---
 
@@ -9,6 +9,8 @@ license: MIT
 Optimize by measurement and equivalence, never by intuition. No change ships without a before/after measurement and proof the observable behavior is unchanged (or the drift is explicitly approved).
 
 ## Modes
+
+Pick the mode from the request: a slow or heavy thing to fix → `optimize`; "where does the time go" → `profile`; choosing between candidates → `decision-benchmark`; re-checking a past win → `verify`.
 
 - `profile` — establish where cost actually goes; no code changes.
 - `optimize` — implement the smallest high-value change against a measured baseline.
@@ -35,6 +37,7 @@ Read [references/decision-benchmark.md](references/decision-benchmark.md) before
 ## Boundaries
 
 - No profiling → no optimizing, unless the defect is already proven (e.g. a known O(n²) with failing-scale evidence).
+- When you cannot run the workload yourself, do not quote estimated speedups as results. Hand the user the exact baseline, after-measurement, and equivalence commands, and mark the win unproven until they report back. Before and after must run on the same input and machine: timing the old code on a sample and the new code on the full data compares nothing.
 - "Clean code" refactors without a measured or evidenced benefit are out of scope — decline or route to `improve`.
 - Do not broaden into a general audit; report incidental findings in one line and move on.
 - Simplicity/maintainability improvements qualify only with observable evidence (deleted code counts, dependency removal, measured build/CI time).

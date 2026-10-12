@@ -1,6 +1,6 @@
 ---
 name: implementation-plan-author
-description: Author self-contained implementation plans, dependency-aware multi-plan programs, or compact handoffs that a fresh agent can execute without conversational memory. Use when the user asks for a plan, program, or handoff for known work. Not for auditing to discover work (use improve), reviewing plans (use adversarial-plan-approval), or when the user wants immediate implementation.
+description: "Author self-contained implementation plans, dependency-aware multi-plan programs, or compact handoffs that a fresh agent can execute without conversational memory. Use when the user asks for a plan, program, or handoff for known work, including implicit ones: writing work up for another agent or a fresh session that will not have this conversation, or a note to resume from before running out of context. Not for auditing to discover work (use improve), reviewing plans (use adversarial-plan-approval), or when the user wants immediate implementation."
 license: MIT
 ---
 
@@ -20,7 +20,7 @@ Templates for all three are in [references/plan-templates.md](references/plan-te
 
 1. Read repository instructions and inspect the live code the plan touches. Every current-state claim in a plan must come from your own reads, not memory or prior reports.
 2. Pin the baseline: record the commit (or another observable baseline) the plan was written against, plus a drift check the executor runs first.
-3. Confirm verification commands actually exist — run the discovery (not the mutation) yourself: the test runner, lint, typecheck, build commands the plan will cite. A plan citing a nonexistent command is broken.
+3. Confirm verification commands actually exist — run the discovery (not the mutation) yourself: the test runner, lint, typecheck, build commands the plan will cite. A plan citing a nonexistent command is broken. If you cannot run discovery (no shell or no repository access), mark those commands and any current-state claims you did not read yourself as unverified, and make checking them the executor's first step.
 4. Fill only the applicable sections of the plan contract; omit sections that do not apply rather than padding them.
 5. Reject vague done criteria in your own draft: every criterion must be a command with an expected result or an observable file/behavior state — never "works correctly".
 6. Specify the *what* and the boundaries; do not prescribe implementation internals (exact private code shape) unless a specific shape is load-bearing.

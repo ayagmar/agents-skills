@@ -12,7 +12,7 @@ Certify whether this artifact should ship, based only on evidence you gathered y
 
 1. Establish what "release" means here: npm publish, tagged GitHub release, deploy, first public exposure. The bar differs; state the assumed bar.
 2. Run the project's own gates first (build, full test suite, lint/typecheck, package dry-run) and record exact results. A red gate is an automatic blocker.
-3. Assess only the applicable dimensions from [references/dimensions.md](references/dimensions.md) — correctness, architecture, security, determinism, tests, performance, UX/accessibility, onboarding, documentation, CI/supply-chain, package metadata, observability/recovery, maintainability. Skip dimensions with no surface (no UI → no UX dimension) and say which were skipped.
+3. Read [references/dimensions.md](references/dimensions.md) and assess only the applicable dimensions — correctness, architecture, security, determinism, tests, performance, UX/accessibility, onboarding, documentation, CI/supply-chain, package metadata, observability/recovery, maintainability. Skip dimensions with no surface (no UI → no UX dimension) and say which were skipped.
 4. Verify claims, don't trust them: README promises vs actual behavior, documented commands actually run, version/changelog/tag consistency, license and metadata correctness.
 5. Classify every finding by severity with evidence (`file:line`, command output):
    - **BLOCKER** — ships broken behavior, data loss, security exposure, or a legal/metadata defect.
@@ -36,6 +36,4 @@ Certify whether this artifact should ship, based only on evidence you gathered y
 ## Boundaries
 
 - Evidence or it is not a finding; "probably" belongs in the deferred backlog marked as unverified.
-- Cosmetic preferences and refactor wishes are LOW, never blockers.
-- Do not implement fixes, and never perform the release itself, in certification mode.
 - For a broad improvement audit rather than a ship/no-ship decision, use `improve` instead.

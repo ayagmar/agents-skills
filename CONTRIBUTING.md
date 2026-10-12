@@ -53,6 +53,16 @@ Agent Skills frontmatter only allows these keys: `name`, `description`, `license
 
 Each plugin ships exactly one skill and exactly one npm package. This keeps Pi's `pi install npm:@ayagmar/<name>` installing exactly one skill (Pi has no way to install a subset of an npm package or a subdirectory of a Git repo), keeps Claude/Codex plugin installs mapping 1:1 to a skill, and keeps `npx skills add ... --skill <name>` unambiguous. Do not add a second skill directory to an existing plugin, and do not put unrelated functionality behind flags in one skill's scripts.
 
+## Evals
+
+Every plugin needs an eval suite in `evals/<name>/` with at least one case where the skill should fire and one near miss where it should not. The `evals` validate stage fails otherwise. When you change a skill's description or instructions, run its suite before and after the change:
+
+```bash
+node scripts/run-evals.mjs --plugin <name>
+```
+
+This calls a model on your Claude Code login and uses your plan's usage, so CI never runs it. Case format, graders, and costs are in [evals/README.md](evals/README.md).
+
 ## Changesets
 
 Add a changeset for every changed workspace:
@@ -85,7 +95,7 @@ npm ci && npm run validate
 
 Use Node 24 (`.nvmrc`); the pinned dev tooling installs only on Node ^22.20, 24, or >=26 (`engine-strict`).
 
-This runs, in order: `layout`, `versions`, `links`, `syntax`, `schema`, `skills`, `claude`, `packages`, `smoke`. You can run a single stage with `node scripts/validate.mjs <stage>`. The `skills` stage needs [GitHub CLI](https://cli.github.com) >= 2.90 on `PATH` for `gh skill publish --dry-run`.
+This runs, in order: `layout`, `versions`, `links`, `syntax`, `schema`, `skills`, `claude`, `evals`, `packages`, `smoke`. You can run a single stage with `node scripts/validate.mjs <stage>`. The `skills` stage needs [GitHub CLI](https://cli.github.com) >= 2.90 on `PATH` for `gh skill publish --dry-run`.
 
 ## No real session data
 

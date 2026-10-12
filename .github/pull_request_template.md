@@ -6,6 +6,7 @@
 
 - [ ] Changeset added for every changed `plugins/*` workspace (`npx changeset`), or not needed (reason: <!-- e.g. docs-only change with no user-facing behavior change -->)
 - [ ] `npm run validate` passes locally
+- [ ] For a changed skill, its eval suite passes (`node scripts/run-evals.mjs --plugin <name>`)
 - [ ] Privacy review: no real session logs, transcripts, credentials, or customer data were added (including as test fixtures)
 - [ ] Script changes reviewed: no network calls, read-only access to session stores, no hard-coded user paths
 - [ ] Package contents inspected for every changed plugin: `npm pack --dry-run --workspace plugins/<name>` (review the Tarball Contents list)
