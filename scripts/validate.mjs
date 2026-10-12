@@ -70,6 +70,7 @@ const STAGES = {
   schema: checkSchema,
   skills: checkSkills,
   claude: checkClaude,
+  evals: () => run(process.execPath, ['scripts/run-evals.mjs', '--check']),
   packages: () => runScript('scripts/check-package-contents.mjs'),
   smoke: () => runScript('scripts/smoke-install.mjs'),
 };

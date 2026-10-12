@@ -23,6 +23,8 @@
     "validate:packages": "node scripts/check-package-contents.mjs",
     "validate:skills": "node scripts/validate.mjs skills",
     "validate:claude": "node scripts/validate.mjs claude",
+    "validate:evals": "node scripts/validate.mjs evals",
+    "evals": "node scripts/run-evals.mjs",
     "smoke:install": "node scripts/smoke-install.mjs",
     "version-packages": "changeset version && node scripts/sync-versions.mjs && npm install --package-lock-only --ignore-scripts && node scripts/check-versions.mjs",
     "release": "npm run validate && changeset publish"

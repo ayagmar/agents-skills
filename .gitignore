@@ -34,3 +34,5 @@ CLAUDE.local.md
 .pi/
 .agents/skills/
 skills-lock.json
+eval-results/
+evals/**/results/
