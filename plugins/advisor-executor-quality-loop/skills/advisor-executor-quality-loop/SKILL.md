@@ -1,12 +1,12 @@
 ---
 name: advisor-executor-quality-loop
-description: Orchestrate complex multi-task work by separating advisor reasoning, delegated execution, and independent verification, driving dispatched tasks to convergence. Use only when the user requests orchestration/delegation, or the work clearly benefits and the user permits it. Not for single tasks doable in-context, plan authoring, or plan review.
+description: "Coordinate delegated work when several agents or workers each take part of a job (subagents, worker agents, parallel sessions): decompose, dispatch self-contained briefs, verify each result yourself instead of trusting reports, and drive corrections to convergence. Use only when the user asks to hand tasks out to workers or agents, fan out, or run parts in parallel (including asking how you would split and check that work before dispatching), or permits it for large separable work. Not for single tasks doable in-context, writing plans for others to execute (implementation-plan-author), or plan review (adversarial-plan-approval)."
 license: MIT
 ---
 
 # Advisor-Executor Quality Loop
 
-You are the advisor: you reason, decompose, dispatch, and independently verify. Executors implement. Use whatever delegation mechanism the environment provides (subagent tools, task boards, worktrees) — never require a specific one, and never delegate at all when direct work in the current context is cheaper and the user did not ask for delegation.
+You are the advisor: you reason, decompose, dispatch, and independently verify. Executors implement. Use whatever delegation mechanism the environment provides (subagent tools, task boards, worktrees) — never require a specific one.
 
 ## Activation gate
 
@@ -17,7 +17,7 @@ Proceed only when one holds; otherwise do the work directly:
 ## Loop
 
 1. **Inspect** the live repository yourself before decomposing. Task briefs built on stale or second-hand state produce garbage.
-2. **Decompose** into narrow, self-contained tasks. Each brief must stand alone: goal, relevant paths, constraints, verification command, observable done criteria. If an approved plan exists, consume it — do not re-author it (that is `implementation-plan-author`).
+2. **Decompose** into narrow, self-contained tasks. Each brief must stand alone: goal, relevant paths, constraints, verification command, observable done criteria. Docs-only and other non-code tasks need them too, as an observable check (a grep, a file-state assertion), because you cannot verify a brief that never said what done means. If an approved plan exists, consume it — do not re-author it (that is `implementation-plan-author`).
 3. **Size and tier**: match task granularity and executor capability to the work. Do not delegate trivial edits; do not hand architecture decisions to the cheapest tier. Cost and context are first-class: prefer fewer, better-scoped tasks over many chatty ones.
 4. **Sequence conflicts**: tasks writing the same files run serially with explicit ordering; independent scopes may run parallel.
 5. **Dispatch** with the minimum context that makes the task self-contained. Do not paste whole sessions or repos into briefs.
@@ -34,11 +34,10 @@ Proceed only when one holds; otherwise do the work directly:
 - No out-of-scope file changes.
 - No forbidden operations occurred (commit/push/publish without authorization).
 
-For large multi-batch remediation audits, hand the batch to the appropriate audit skill instead of expanding this contract.
+For large multi-batch remediation audits, hand the batch to the `improve` skill's post-remediation mode instead of expanding this contract.
 
 ## Boundaries
 
-- Delegation is optional; treat "spawn an agent" reflexes as a smell when in-context work is simpler.
 - Never switch to a cheaper model/tier for judgment-heavy work without the user's approval of that tradeoff.
 - Do not commit, push, merge, or publish executor output unless explicitly authorized.
 - Preserve executor worktrees/branches for the user's merge decision when isolation was used.

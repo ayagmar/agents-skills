@@ -18,6 +18,8 @@ Issue exactly one per task or decision gate:
 
 ## Stages
 
+Default to `broad-review`; use a later stage only when earlier review verdicts for this plan exist or the user names the stage.
+
 - `broad-review` — first full pass over the whole plan/program: run every check below on every task.
 - `targeted-recheck` — after corrections, re-verify only the previously failed items plus anything the corrections touched. Do not re-open passed items without new evidence.
 - `final-approval` — confirm all verdicts are ACCEPT, dependencies form a valid order, and nothing changed under the plan since review (rerun drift checks). Must not reopen accepted design decisions without new evidence.

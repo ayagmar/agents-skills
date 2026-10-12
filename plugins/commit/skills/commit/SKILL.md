@@ -1,6 +1,6 @@
 ---
 name: commit
-description: "Read this skill before making git commits — single commits, logical commit stacks over mixed working trees, and plan-traceable commit sequences."
+description: "Write Conventional Commit messages and make safe git commits: single commits, logical commit stacks over a mixed working tree, and commits at a plan's boundaries. Use whenever you are about to run git commit, or the user asks for a commit message, asks you to commit, or wants work split into commits, even when they will run git themselves. Not for explaining git concepts, rebasing, or pushing."
 license: Apache-2.0
 ---
 

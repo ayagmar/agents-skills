@@ -1,6 +1,6 @@
 ---
 name: summarize
-description: "Fetch a URL or convert a local file (PDF/DOCX/HTML/etc.) into Markdown using `uvx markitdown`, optionally it can summarize"
+description: "Convert a URL or local document (PDF, DOCX, PPTX, XLSX, HTML, etc.) to Markdown with `uvx markitdown`, and optionally summarize it with a focus prompt. Use whenever the user shares a link or a document file and wants its content read, reviewed, searched, quoted, or summarized, even if they only paste the link and ask a question about what is in it (a PDF report, a Word spec, a slide deck, a web page). Not for text already pasted into the chat or for explaining a topic from general knowledge."
 license: Apache-2.0
 compatibility: Requires Node.js and uvx (markitdown). The optional summary step runs the pi CLI. Fetches URLs.
 ---
@@ -9,18 +9,11 @@ Turn “things” (URLs, PDFs, Word docs, PowerPoints, HTML pages, text files, e
 
 `markitdown` can fetch URLs by itself; this skill mainly wraps it to make saving + summarizing convenient.
 
-## When to use
-
-Use this skill when you need to:
-- pull down a web page as a document-like Markdown representation
-- convert binary docs (PDF/DOCX/PPTX) into Markdown for analysis
-- quickly produce a short summary of a long document before deeper work
-
 ## Quick usage
 
-### Convert a URL or file to Markdown
+`to-markdown.mjs` sits at the root of this skill's directory. Paths below are relative to that directory; when running from elsewhere, prefix the skill directory's path.
 
-Run from **this skill folder** (the agent should `cd` here first):
+### Convert a URL or file to Markdown
 
 ```bash
 uvx markitdown <url-or-path>
@@ -32,15 +25,13 @@ To write Markdown to a temp file (prints the path) use the wrapper:
 node to-markdown.mjs <url-or-path> --tmp
 ```
 
-Tip: when summarizing, the script will **always** write the full converted Markdown to a temp `.md` file and will **always** print a final "Hint" line with the path (so you can open/inspect the full content).
-
 Write Markdown to a specific file:
 
 ```bash
-uvx markitdown <url-or-path> > /tmp/doc.md
+node to-markdown.mjs <url-or-path> --out <file>.md
 ```
 
-### Convert + summarize with GPT-6 Luna medium (pass context!)
+### Convert + summarize (pass context!)
 
 Summaries are only useful when you provide **what you want extracted** and the **audience/purpose**.
 
@@ -56,5 +47,5 @@ node to-markdown.mjs <url-or-path> --summary --prompt "Focus on security implica
 
 This will:
 1) convert to Markdown via `uvx markitdown`
-2) write the full Markdown to a temp `.md` file and print its path as a "Hint" line
+2) always write the full Markdown to a temp `.md` file and print its path as a final "Hint" line, so you can open/inspect the full content
 3) run `pi --model openai-codex/gpt-6-luna:medium` (no-tools, no-session) to summarize using your extra prompt

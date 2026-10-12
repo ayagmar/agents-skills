@@ -1,6 +1,6 @@
 ---
 name: x-post-craft
-description: "Draft, rewrite, and review posts, threads, replies, and captions for X/Twitter using the mechanics of X's open-source recommendation stack: conversation and depth signals are rewarded, negative feedback and spam signals kill distribution. Use when asked to write a tweet, thread, reply, or caption for a photo or video, or to check a draft before publishing, on any subject or in any tone. Covers hooks, clarity, anti-slop style rules, media, and posting cadence. Not for long-form articles or other platforms."
+description: "Draft, rewrite, and review posts, threads, replies, and captions for X/Twitter using the mechanics of X's open-source recommendation stack: conversation and depth signals are rewarded, negative feedback and spam signals kill distribution. Use when asked to write a tweet, thread, reply, or caption for a photo or video, or to check a draft before publishing, on any subject or in any tone. Covers hooks, clarity, anti-slop style rules, media, and posting cadence. Not for long-form articles or other platforms; for those, use no-slop if it is installed."
 license: MIT
 ---
 
@@ -99,7 +99,7 @@ When asked to write, improve, or review a post:
 
 1. Collect raw material first: what the post is about, one concrete detail, who should care, the tone (funny, informative, personal, opinion), and what you want readers to do, if anything. If media is attached, look at it and describe only what it actually shows. If the user has not supplied facts, ask. Never invent numbers, quotes, or outcomes.
 2. Draft two or three variants with different openings (for example: the fact or result first, the tension or surprise first, the media or detail first).
-3. Run each variant against "Anti-slop rules" and "Before publishing". Kill the weak ones.
+3. Run each variant against "Anti-slop rules" and "Before publishing". Then check every number, name, event, and claim in it against what the user gave you: drafts drift into plausible inventions ("a 40 GB file", "she waited until I paid"), and an invented detail in a public post is the user's to answer for. Replace each one with a bracketed placeholder or cut it. Kill the weak variants.
 4. Deliver at most three options, one line on why each might win. For a thread, deliver the thread plus its standalone first post.
 
 Keep the reply brief. The user came for posts, not a lecture about the feed. When a claim about the algorithm matters and the user wants the source, read [references/algorithm-notes.md](references/algorithm-notes.md) before explaining it.

@@ -1,6 +1,6 @@
 ---
 name: product-spec-foundry
-description: Turn a product idea, loose PRD, partial spec, or inconsistent pre-implementation repository into an implementation-ready specification package (vision, vocabulary, journeys, domain boundaries, decisions, operational policies, API contract, aligned issues). Use for pre-build product shaping, spec consolidation, or a pre-implementation readiness pass. Not for auditing existing code (use improve), release certification, or implementing features.
+description: Turn a product idea, loose PRD, partial spec, or inconsistent pre-implementation repository into an implementation-ready specification package (vision, vocabulary, journeys, domain boundaries, decisions, operational policies, API contract, aligned issues). Use when nothing is built yet and someone wants an idea pinned down before coding or before handing it to developers or a contractor, wants scattered docs, an API contract, and issues reconciled, or asks whether a pre-build spec is ready to hand off. Not for auditing existing code (use improve), release certification (use release-readiness-certification), acceptance criteria for a single feature ticket, or implementing features.
 license: MIT
 ---
 
@@ -17,7 +17,7 @@ Pick the one mode matching the request; do not run the full pipeline for a small
 - `align` — reconcile docs, OpenAPI, epics/issues, dependencies, and release ordering so all surfaces state the same product.
 - `readiness` — a lightweight pre-build consistency pass with a GO / FIX-FIRST verdict. This is not release certification (that is `release-readiness-certification`).
 
-## Workflow (specify mode, staged)
+## Workflow (specify and align modes, staged)
 
 Apply only stages the product needs; skipping a stage is a recorded decision, not an omission.
 
@@ -36,7 +36,7 @@ Check, with file/issue evidence for each failure:
 - every journey has acceptance criteria; every criterion is observable
 - vocabulary is consistent across docs, OpenAPI, and issues
 - no contradiction between spec, contract, and tracker
-- operational policies exist for every load-bearing concern and are internally consistent
+- operational policies exist for every load-bearing concern and are internally consistent (when the domain touches money, time, corrections, provenance, or auth, check them against [references/operational-policies.md](references/operational-policies.md))
 - decisions cover the contested choices; no undecided blocker remains
 - generators/consumers of the contract run clean
 
