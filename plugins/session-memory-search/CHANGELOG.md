@@ -1,5 +1,11 @@
 # @ayagmar/session-memory-search
 
+## 0.1.3
+
+### Patch Changes
+
+- 14acea2: Say that the script path is relative to the skill directory, and cover picking the right session out of pasted search hits.
+
 ## 0.1.2
 
 ### Patch Changes

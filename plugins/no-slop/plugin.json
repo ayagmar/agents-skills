@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "no-slop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Write, edit, or audit READMEs, docs, landing pages, and other prose so it reads like a person wrote it, without AI-writing patterns.",
   "author": {
     "name": "Abdeslam Yassine Agmar",

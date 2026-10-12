@@ -1,5 +1,11 @@
 # @ayagmar/adversarial-plan-approval
 
+## 0.1.2
+
+### Patch Changes
+
+- 14acea2: Default to the `broad-review` stage unless earlier verdicts exist or the user names a stage.
+
 ## 0.1.1
 
 ### Patch Changes

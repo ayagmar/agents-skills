@@ -1,5 +1,11 @@
 # @ayagmar/no-slop
 
+## 0.1.1
+
+### Patch Changes
+
+- 14acea2: In Detect, answer "does this read as AI?" with findings, not a yes or no.
+
 ## 0.1.0
 
 ### Minor Changes

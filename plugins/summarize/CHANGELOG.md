@@ -1,5 +1,11 @@
 # @ayagmar/summarize
 
+## 0.1.3
+
+### Patch Changes
+
+- 14acea2: The description says when to use the skill and when not to. Script paths are relative to the skill directory instead of asking the agent to `cd` there, `--out` replaces a hardcoded `/tmp/doc.md`, and a heading no longer names a model.
+
 ## 0.1.2
 
 ### Patch Changes
