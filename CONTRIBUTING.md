@@ -113,7 +113,7 @@ Use synthetic, hand-written fixtures for tests and examples instead.
 Scripts under `plugins/<name>/skills/<name>/scripts/` are reviewed with extra care because they run with the installing user's permissions:
 
 - Prefer Node.js built-ins; a new runtime dependency needs a clear justification in the PR description.
-- No network access: scripts read local session stores only. `rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)"` over the script is a quick heuristic. It can miss bare `"https"`/`"net"`/`"dns"` imports, `require(...)`, `WebSocket`, or spawned tools like `curl`. Human review of every script change is the actual control.
+- No network access: scripts read local session stores only. The one exception is `session-cost-forensics`, which runs the latest release through `npx llm-usage-metrics@latest` (package download, LiteLLM price refresh unless `--pricing-offline`) and rejects an unknown JSON `schemaVersion`; keep any new network use out. `rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)"` over the script is a quick heuristic. It can miss bare `"https"`/`"net"`/`"dns"` imports, `require(...)`, `WebSocket`, or spawned tools like `curl`. Human review of every script change is the actual control.
 - Read-only access to session stores: scripts must not write to `~/.codex`, `~/.pi/agent/sessions`, or `~/.claude/projects`.
 - No hard-coded user paths (`/home/<user>`, `/Users/<user>`, `C:\Users\...`); resolve paths from `os.homedir()` or environment variables.
 - `node --check <script>` must be clean; this is also enforced by the `syntax` validate stage.

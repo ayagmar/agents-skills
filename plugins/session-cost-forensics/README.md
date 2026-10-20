@@ -1,10 +1,17 @@
 # session-cost-forensics
 
-Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, duplicate sessions, and orchestration inefficiency. Privacy: reads local session stores (`~/.codex`, `~/.pi/agent/sessions`, `~/.claude/projects`) read-only and makes no network requests.
+Analyze local Codex, Pi, and Claude Code session logs for cost, token waste, cache misses, retries, duplicate sessions, and orchestration inefficiency. Tokens and cost come from [llm-usage-metrics](https://github.com/ayagmar/llm-usage-metrics), which the bundled script runs through `npx`; the script adds compactions, retries, duplicate sessions, and subagent counts from the session files.
+
+## What it accesses
+
+- Reads the local session stores `~/.codex` (or `$CODEX_HOME`), `~/.pi/agent/sessions`, `~/.omp/agent/sessions`, and `~/.claude/projects` and `~/.claude/transcripts` (or the same under each `$CLAUDE_CONFIG_DIR` entry), without writing to them.
+- Runs `npx --yes llm-usage-metrics@latest`, which asks the npm registry for the latest release on every run and downloads it into the npm cache when it is not there yet. The script refuses output with an unknown JSON `schemaVersion`.
+- llm-usage-metrics downloads model prices from LiteLLM on GitHub (`raw.githubusercontent.com`) when its price cache is older than a day, and caches them under `~/.cache/llm-usage-metrics/`. The request carries no session data. `--pricing-offline` skips it and uses cached or bundled prices.
+- The script turns off the llm-usage-metrics event ledger and its update check, and counts only this machine, so it never syncs other machines over ssh.
 
 ## Requirements
 
-- Node.js >= 22.19
+- Node.js >= 22.19 and `npx`
 
 ## Install
 

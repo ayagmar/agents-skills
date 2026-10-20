@@ -23,7 +23,7 @@ Cause: abandoned-and-restarted work, or the same job run through multiple provid
 Change: one canonical session per job; write a handoff before switching providers.
 
 ## Executor/reviewer noise
-Signal (Claude): `--include-subagents` adds many sessions with high tokens per subagent for small diffs; (any): many tool_results with few user messages.
+Signal (Claude): with `--include-subagents`, a high `subagent_transcripts` count on a session with a small diff; (any): many tool_results with few user messages.
 Cause: over-delegation — dispatching trivial work to fresh-context agents that must re-read the repo each time.
 Change: delegate only work that amortizes its context-load cost; batch small tasks into one executor.
 

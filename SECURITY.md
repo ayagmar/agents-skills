@@ -23,9 +23,13 @@ The session skills (`session-memory-search` and `session-cost-forensics`) open l
 - `~/.claude/projects` (Claude Code session logs)
 - `~/.claude/history.jsonl` (Claude Code prompt index; named by `session-cost-forensics` as a reference source)
 
+`session-cost-forensics` also follows `CODEX_HOME` and a comma-separated `CLAUDE_CONFIG_DIR` instead of `~/.codex` and `~/.claude`, and reads `~/.omp/agent/sessions` and the `transcripts/` directory next to each Claude `projects/` directory, the same directories llm-usage-metrics reads.
+
 Neither session skill writes to these directories. `session-memory-search` may additionally spawn a local `rg` (ripgrep) subprocess to prefilter files faster; it reads the same local paths and performs no network I/O.
 
-The scripts make no network calls. Their output goes back to the invoking agent like any other tool output, so it reaches that agent's model provider. `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project`/`--since` to keep other projects' sessions out of scope.
+`session-cost-forensics` runs `npx --yes llm-usage-metrics@latest session --json` for tokens and cost. The version is not pinned: each run resolves the latest llm-usage-metrics release on npm and downloads it when it is not already in the npm cache, so a new release runs without a change to this skill. The script refuses output whose JSON `schemaVersion` it does not know. llm-usage-metrics also downloads LiteLLM model prices from `raw.githubusercontent.com` when its price cache is stale, unless the script gets `--pricing-offline`. Neither request carries session data. The script runs it with the llm-usage-metrics event ledger and update check off and counts only this machine, so it writes nothing besides the npm package cache and the price cache, and opens no ssh connections.
+
+The skill scripts themselves make no network calls. Their output goes back to the invoking agent like any other tool output, so it reaches that agent's model provider. `session-memory-search` returns redacted conversation snippets, session paths, and project names; `session-cost-forensics` returns session paths and usage metadata. Use `--project`/`--since` to keep other projects' sessions out of scope.
 
 ## Other skills
 
@@ -33,7 +37,7 @@ The scripts make no network calls. Their output goes back to the invoking agent 
 
 ## No-network guarantee
 
-The two session skills make no network requests. This guarantee covers only those two skills. It is enforced by human review of every script change (the PR template checkbox and CODEOWNERS require it); there is no automated gate. A quick first check:
+`session-memory-search` makes no network requests, and `session-cost-forensics` makes none beyond the `npx` package download and price refresh described above. This guarantee covers only those two skills. It is enforced by human review of every script change (the PR template checkbox and CODEOWNERS require it); there is no automated gate. A quick first check:
 
 ```bash
 rg -n "fetch\(|https?:|node:(net|http|https|dgram|tls)" plugins/*/skills/*/scripts
