@@ -10,7 +10,7 @@ compatibility: Requires Node.js 22.19+ and npx. Reads local Codex (~/.codex), Pi
 Measure where agent-session tokens, cost, and context go, then turn measurements into workflow changes. Read-only over the session stores; never modify or delete session files.
 
 Data sources (local defaults):
-- `~/.codex/sessions/` (or `$CODEX_HOME/sessions/`), `~/.pi/agent/sessions/` and `~/.omp/agent/sessions/`, `~/.claude/projects/` and `~/.claude/transcripts/` (or the same under each comma-separated `$CLAUDE_CONFIG_DIR`). Claude `subagents/` subdirectories, and `agent-<id>.jsonl` files from older versions, hold delegated agents. The script passes these directories to llm-usage-metrics, so its `sourceDirs` config does not apply.
+- `~/.codex/sessions/` (or `$CODEX_HOME/sessions/`), `~/.pi/agent/sessions/` and `~/.omp/agent/sessions/`, `~/.claude/projects/` and `~/.claude/transcripts/` (or the same under each comma-separated `$CLAUDE_CONFIG_DIR`). Claude `subagents/` subdirectories, and `agent-<id>.jsonl` files from older versions, hold delegated agents. Codex compresses older rollouts to `.jsonl.zst`; the script reads those too, and reads only the `.jsonl` when both exist. The script passes these directories to llm-usage-metrics, so its `sourceDirs` config does not apply.
 - `~/.claude/history.jsonl` (prompt index only — no usage data)
 
 Tokens, cost, and models per session come from [llm-usage-metrics](https://github.com/ayagmar/llm-usage-metrics) (`llm-usage session --json`), which the script runs through `npx` at its latest release (`llm-usage-metrics@latest`); it stops if that release reports an unknown JSON `schemaVersion`. The script itself reads the session files only for what that report lacks: compactions, user prompts, and tool results.

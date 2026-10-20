@@ -10,6 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
+import zlib from "node:zlib";
 
 const LLM_USAGE_PACKAGE = "llm-usage-metrics@latest";
 const HOME = os.homedir();
@@ -102,7 +103,13 @@ function loadUsageRows(args, roots) {
   return report.data.filter((r) => r.rowType === "session");
 }
 
-function* walkJsonl(root) {
+// Codex compresses rollouts it no longer writes to `<name>.jsonl.zst`.
+const ZST = ".zst";
+
+// Session files under a root. With `compressed`, `.jsonl.zst` files too, except one whose
+// `.jsonl` also exists: Codex decompresses a rollout to append to it, and like
+// llm-usage-metrics the plain file is then the session.
+function* walkJsonl(root, compressed = false) {
   if (!fs.existsSync(root)) return;
   const stack = [root];
   while (stack.length) {
@@ -116,6 +123,8 @@ function* walkJsonl(root) {
     if (st.isDirectory()) {
       for (const e of fs.readdirSync(cur)) stack.push(path.join(cur, e));
     } else if (cur.endsWith(".jsonl")) {
+      yield cur;
+    } else if (compressed && cur.endsWith(`.jsonl${ZST}`) && !fs.existsSync(cur.slice(0, -ZST.length))) {
       yield cur;
     }
   }
@@ -182,7 +191,8 @@ function scanFile(provider, file) {
     s.user_messages += 1;
     s.prompt_fps.push(fp(text));
   };
-  for (const line of fs.readFileSync(file, "utf8").split("\n")) {
+  const raw = fs.readFileSync(file);
+  for (const line of (file.endsWith(ZST) ? zlib.zstdDecompressSync(raw) : raw).toString("utf8").split("\n")) {
     if (!line.trim()) continue;
     const e = safeParse(line);
     if (!e) continue;
@@ -231,7 +241,7 @@ function scanFile(provider, file) {
     s.session_id = claudeIds.has(base) ? base : ([...claudeIds][0] ?? null);
   }
   // Like llm-usage-metrics, a file that records no session id is named by its file name.
-  s.session_id ??= path.basename(file, ".jsonl");
+  s.session_id ??= path.basename(path.basename(file, ZST), ".jsonl");
   return s;
 }
 
@@ -244,7 +254,7 @@ function main() {
   // One llm-usage session can span several files (Claude subagent transcripts, resumed or forked files).
   const files = new Map();
   for (const p of providers) {
-    for (const file of roots[p].flatMap((root) => [...walkJsonl(root)])) {
+    for (const file of roots[p].flatMap((root) => [...walkJsonl(root, p === "codex")])) {
       let s;
       try {
         s = scanFile(p, file);
