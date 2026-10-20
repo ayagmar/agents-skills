@@ -31,7 +31,7 @@ Tokens, cost, and models per session come from [llm-usage-metrics](https://githu
 
 - Cost: Pi's is the cost Pi logged; Codex and Claude Code costs are estimates from LiteLLM list prices. `~$` (or `cost_incomplete`) means some requests had no known price; `-` means none had one.
 - Claude Code subagents: their tokens and cost are always counted in the parent session, because llm-usage-metrics files them under the parent's session id. `--include-subagents` adds the subagent transcripts' prompts, compactions, and tool results to the parent (skipping the parent lines a forked subagent copies), lists them in `other_paths`, and counts them in `subagent_transcripts`; it cannot split tokens per subagent.
-- One session can span several files (subagents, resumed or forked transcripts); `path` is the main file and `other_paths` holds the rest.
+- One session can span several files (subagents, resumed or forked transcripts); `path` is the main file and `other_paths` holds the rest. Like llm-usage-metrics, a Pi or Codex fork's copy of its parent's entries is not counted again in the fork.
 - Structure counts (compactions, prompts, tool results) cover whole files, even when the date window cuts a session in half.
 
 ## Rules

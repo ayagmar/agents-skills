@@ -171,8 +171,39 @@ function claudeForkCopiedUuids(file) {
   return uuids;
 }
 
+// A Pi fork's header names its parent file; the fork starts with the parent's entries,
+// copied with their timestamps, ahead of its own. Like llm-usage-metrics, those copies are
+// skipped while the parent is read, and otherwise belong to the parent's session.
+function piFork(header, file, piRoots) {
+  const forkedAtMs = Date.parse(header.timestamp);
+  const parentSession = typeof header.parentSession === "string" ? header.parentSession.trim() : "";
+  if (!parentSession || Number.isNaN(forkedAtMs)) return null;
+  const parent = path.resolve(path.dirname(file), parentSession);
+  const within = (root) => {
+    const rel = path.relative(root, parent);
+    return !rel.startsWith("..") && !path.isAbsolute(rel);
+  };
+  // Pi names a session file `<timestamp>_<session id>.jsonl`.
+  const stem = path.basename(parent, ".jsonl");
+  const parentId = stem.includes("_") ? stem.slice(stem.lastIndexOf("_") + 1).trim() : "";
+  return { forkedAtMs, parentRead: fs.existsSync(parent) && piRoots.some(within), parentId };
+}
+
+function emptyCounts() {
+  return { user_messages: 0, tool_results: 0, compactions: 0, prompt_fps: [] };
+}
+
+function addCounts(to, from) {
+  to.user_messages += from.user_messages;
+  to.tool_results += from.tool_results;
+  to.compactions += from.compactions;
+  to.prompt_fps.push(...from.prompt_fps);
+}
+
 // --- Structure the usage report does not carry: prompts, compactions, tool results.
-function scanFile(provider, file) {
+// Returns the file's scan, plus one for the parent's session when a Pi fork holds the only
+// copy of its parent's entries.
+function scanFile(provider, file, piRoots) {
   const s = {
     session_id: null,
     path: file,
@@ -180,16 +211,21 @@ function scanFile(provider, file) {
     // Current Claude Code writes subagents under <session>/subagents/; older versions wrote agent-<id>.jsonl beside the session.
     is_subagent:
       provider === "claude" && (file.includes(`${path.sep}subagents${path.sep}`) || CLAUDE_SUBAGENT_FILE.test(path.basename(file))),
-    user_messages: 0,
-    tool_results: 0,
-    compactions: 0,
-    prompt_fps: [],
+    ...emptyCounts(),
   };
   const claudeIds = new Set();
   const copied = provider === "claude" ? claudeForkCopiedUuids(file) : new Set();
+  let piForkOf = null;
+  let piParent = null;
+  // A Codex fork (first session_meta names forked_from_id) replays its parent's lines up to
+  // the thread_settings_applied event carrying its own id. Like llm-usage-metrics, drop
+  // what was read until then; if that event never comes, keep it.
+  let codexForkOf = null;
+  let codexHeld = null;
+  let t = s;
   const prompt = (text) => {
-    s.user_messages += 1;
-    s.prompt_fps.push(fp(text));
+    t.user_messages += 1;
+    t.prompt_fps.push(fp(text));
   };
   const raw = fs.readFileSync(file);
   for (const line of (file.endsWith(ZST) ? zlib.zstdDecompressSync(raw) : raw).toString("utf8").split("\n")) {
@@ -199,25 +235,40 @@ function scanFile(provider, file) {
     const p = e.payload || {};
     if (provider === "codex") {
       if (e.type === "session_meta") {
+        if (s.session_id === null && typeof p.forked_from_id === "string" && p.forked_from_id.trim() && p.id) {
+          codexForkOf = p.id;
+          codexHeld = emptyCounts();
+        }
         s.session_id ??= p.id || null;
         s.project ??= p.cwd || null;
       }
-      if (e.type === "compacted") s.compactions += 1;
+      if (codexHeld && e.type === "event_msg" && p.type === "thread_settings_applied" && p.thread_id === codexForkOf) {
+        codexHeld = null;
+        continue;
+      }
+      t = codexHeld ?? s;
+      if (e.type === "compacted") t.compactions += 1;
       if (e.type === "event_msg" && p.type === "user_message" && typeof p.message === "string") prompt(p.message);
-      if (e.type === "response_item" && p.type === "function_call_output") s.tool_results += 1;
+      if (e.type === "response_item" && p.type === "function_call_output") t.tool_results += 1;
     } else if (provider === "pi") {
       if (e.type === "session") {
         s.session_id ??= e.id || null;
         s.project ??= e.cwd || null;
+        piForkOf ??= piFork(e, file, piRoots);
       }
-      if (e.type === "compaction") s.compactions += 1;
+      t = s;
+      if (piForkOf && Date.parse(e.timestamp) < piForkOf.forkedAtMs) {
+        if (piForkOf.parentRead) continue;
+        if (piForkOf.parentId) t = piParent ??= { ...s, session_id: piForkOf.parentId, ...emptyCounts() };
+      }
+      if (e.type === "compaction") t.compactions += 1;
       if (e.type !== "message") continue;
       const m = e.message || {};
       if (m.role === "user") {
         const texts = (m.content || []).filter((c) => c.type === "text" && typeof c.text === "string").map((c) => c.text);
         if (texts.length) prompt(texts.join(" "));
       }
-      if (m.role === "toolResult" || m.role === "tool") s.tool_results += 1;
+      if (m.role === "toolResult" || m.role === "tool") t.tool_results += 1;
     } else {
       if (e.sessionId) claudeIds.add(e.sessionId);
       if (copied.has(e.uuid)) continue;
@@ -240,9 +291,10 @@ function scanFile(provider, file) {
     const base = path.basename(file, ".jsonl");
     s.session_id = claudeIds.has(base) ? base : ([...claudeIds][0] ?? null);
   }
+  if (codexHeld) addCounts(s, codexHeld);
   // Like llm-usage-metrics, a file that records no session id is named by its file name.
   s.session_id ??= path.basename(path.basename(file, ZST), ".jsonl");
-  return s;
+  return piParent ? [s, piParent] : [s];
 }
 
 function main() {
@@ -255,16 +307,18 @@ function main() {
   const files = new Map();
   for (const p of providers) {
     for (const file of roots[p].flatMap((root) => [...walkJsonl(root, p === "codex")])) {
-      let s;
+      let scans;
       try {
-        s = scanFile(p, file);
+        scans = scanFile(p, file, roots.pi ?? []);
       } catch {
         continue;
       }
-      if (s.is_subagent && !args.includeSubagents) continue;
-      const key = `${p}\0${s.session_id}`;
-      if (!files.has(key)) files.set(key, []);
-      files.get(key).push(s);
+      for (const s of scans) {
+        if (s.is_subagent && !args.includeSubagents) continue;
+        const key = `${p}\0${s.session_id}`;
+        if (!files.has(key)) files.set(key, []);
+        files.get(key).push(s);
+      }
     }
   }
 
