@@ -137,14 +137,6 @@ function fp(text) {
     .slice(0, 12);
 }
 
-// Session ids follow llm-usage-metrics: the id the file records, else one derived from the file name.
-function fallbackSessionId(provider, file) {
-  const base = path.basename(file, ".jsonl");
-  if (provider !== "pi") return base;
-  const sep = base.lastIndexOf("_");
-  return sep === -1 ? base : base.slice(sep + 1);
-}
-
 const CLAUDE_SUBAGENT_FILE = /^agent-([\w-]+)\.jsonl$/;
 
 // A forked Claude subagent transcript starts with its parent's lines, copied under the same
@@ -238,7 +230,8 @@ function scanFile(provider, file) {
     const base = path.basename(file, ".jsonl");
     s.session_id = claudeIds.has(base) ? base : ([...claudeIds][0] ?? null);
   }
-  s.session_id ??= fallbackSessionId(provider, file);
+  // Like llm-usage-metrics, a file that records no session id is named by its file name.
+  s.session_id ??= path.basename(file, ".jsonl");
   return s;
 }
 
