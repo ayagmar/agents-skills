@@ -13,11 +13,19 @@ import crypto from "node:crypto";
 
 const LLM_USAGE_PACKAGE = "llm-usage-metrics@latest";
 const HOME = os.homedir();
+// The same default directories llm-usage-metrics reads, passed to it explicitly so both read
+// the same files: CODEX_HOME and a comma-separated CLAUDE_CONFIG_DIR replace the home defaults.
+const CODEX_HOME = process.env.CODEX_HOME?.trim() || path.join(HOME, ".codex");
+const CLAUDE_CONFIG_DIRS = (process.env.CLAUDE_CONFIG_DIR ?? "").split(",").map((d) => d.trim()).filter(Boolean);
 const ROOTS = {
-  codex: path.join(HOME, ".codex", "sessions"),
-  pi: path.join(HOME, ".pi", "agent", "sessions"),
-  claude: path.join(HOME, ".claude", "projects"),
+  codex: [path.join(CODEX_HOME, "sessions")],
+  pi: [path.join(HOME, ".pi", "agent", "sessions"), path.join(HOME, ".omp", "agent", "sessions")],
+  claude: (CLAUDE_CONFIG_DIRS.length ? CLAUDE_CONFIG_DIRS : [path.join(HOME, ".claude")]).flatMap((d) => [
+    path.join(d, "projects"),
+    path.join(d, "transcripts"),
+  ]),
 };
+const DIR_FLAGS = { codex: "--codex-dir", pi: "--pi-dir", claude: "--claude-dir" };
 
 function usage() {
   console.error(
@@ -59,7 +67,9 @@ function parseArgs(argv) {
 // --- Tokens, cost, and models from llm-usage-metrics, keyed by source and session id.
 // The event store is off so the run writes nothing besides the pricing cache, and only
 // this machine is counted, without syncing other machines over ssh.
-function loadUsageRows(args, providers) {
+function loadUsageRows(args, roots) {
+  const providers = Object.keys(roots).filter((p) => roots[p].length);
+  if (!providers.length) return [];
   const cliArgs = [
     "--yes",
     LLM_USAGE_PACKAGE,
@@ -74,6 +84,7 @@ function loadUsageRows(args, providers) {
     "local",
     "--no-sync",
   ];
+  for (const p of providers) for (const root of roots[p]) cliArgs.push(DIR_FLAGS[p], root);
   if (args.since) cliArgs.push("--since", args.since);
   if (args.until) cliArgs.push("--until", args.until);
   if (args.pricingOffline) cliArgs.push("--pricing-offline");
@@ -205,11 +216,13 @@ function scanFile(provider, file) {
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const providers = args.provider === "all" ? ["codex", "pi", "claude"] : [args.provider];
+  // llm-usage rejects a directory flag naming a missing directory.
+  const roots = Object.fromEntries(providers.map((p) => [p, ROOTS[p].filter((root) => fs.existsSync(root))]));
 
   // One llm-usage session can span several files (Claude subagent transcripts, resumed or forked files).
   const files = new Map();
   for (const p of providers) {
-    for (const file of walkJsonl(ROOTS[p])) {
+    for (const file of roots[p].flatMap((root) => [...walkJsonl(root)])) {
       let s;
       try {
         s = scanFile(p, file);
@@ -225,7 +238,7 @@ function main() {
 
   let rows;
   try {
-    rows = loadUsageRows(args, providers);
+    rows = loadUsageRows(args, roots);
   } catch (err) {
     console.error(`session_cost_report: npx ${LLM_USAGE_PACKAGE} session --json failed: ${err.message}`);
     process.exit(1);
