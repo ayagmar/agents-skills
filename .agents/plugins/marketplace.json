@@ -71,6 +71,17 @@
       "category": "Developer Tools"
     },
     {
+      "name": "llm-usage-metrics",
+      "source": {
+        "source": "local",
+        "path": "./plugins/llm-usage-metrics"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "no-slop",
       "source": {
         "source": "local",

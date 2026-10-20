@@ -4,7 +4,7 @@
     "name": "Abdeslam Yassine Agmar",
     "url": "https://github.com/ayagmar"
   },
-  "description": "Catalog of agent skills for planning and review workflows, commits, document summarization, local session history search and cost forensics, X/Twitter post writing, and prose editing.",
+  "description": "Catalog of agent skills for planning and review workflows, commits, document summarization, local session history search, cost forensics, and usage reports, X/Twitter post writing, and prose editing.",
   "plugins": [
     {
       "name": "adversarial-plan-approval",
@@ -35,6 +35,11 @@
       "name": "improve",
       "source": "./plugins/improve",
       "description": "Survey a codebase as a senior advisor, report prioritized improvements, and implement selected fixes or produce handoff plans."
+    },
+    {
+      "name": "llm-usage-metrics",
+      "source": "./plugins/llm-usage-metrics",
+      "description": "Answer AI coding-tool spend and usage questions with the llm-usage CLI: cost and tokens by day, model, project, or session, estimated 5-hour plan windows, tool-call errors, and status lines."
     },
     {
       "name": "no-slop",

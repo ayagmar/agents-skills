@@ -29,7 +29,7 @@ The scripts make no network calls. Their output goes back to the invoking agent 
 
 ## Other skills
 
-`summarize` fetches URLs you give it and runs local tools (`uvx markitdown`, and `pi` for the optional summary); its output reaches your agent's model provider. The remaining skills (`adversarial-plan-approval`, `advisor-executor-quality-loop`, `commit`, `engineering-optimization`, `implementation-plan-author`, `improve`, `product-spec-foundry`, `release-readiness-certification`) are instruction-only and ship no scripts.
+`summarize` fetches URLs you give it and runs local tools (`uvx markitdown`, and `pi` for the optional summary); its output reaches your agent's model provider. `llm-usage-metrics` ships no scripts; it has the agent run the `llm-usage-metrics` CLI (`npx` or a global install), which reads local coding-tool logs, writes its own ledger and price cache, and downloads LiteLLM prices unless `--pricing-offline`. The remaining skills (`adversarial-plan-approval`, `advisor-executor-quality-loop`, `commit`, `engineering-optimization`, `implementation-plan-author`, `improve`, `product-spec-foundry`, `release-readiness-certification`) are instruction-only and ship no scripts.
 
 ## No-network guarantee
 

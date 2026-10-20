@@ -1,0 +1,46 @@
+{
+  "name": "@ayagmar/llm-usage-metrics",
+  "version": "0.0.0",
+  "description": "Answer AI coding-tool spend and usage questions with the llm-usage CLI: cost and tokens by day, model, project, or session, estimated 5-hour plan windows, tool-call errors, and status lines.",
+  "keywords": [
+    "agent-skills",
+    "pi-package",
+    "claude-code",
+    "codex",
+    "cost-analysis",
+    "token-usage"
+  ],
+  "homepage": "https://github.com/ayagmar/agents-skills/tree/main/plugins/llm-usage-metrics#readme",
+  "bugs": {
+    "url": "https://github.com/ayagmar/agents-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayagmar/agents-skills.git",
+    "directory": "plugins/llm-usage-metrics"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Abdeslam Yassine Agmar",
+    "url": "https://github.com/ayagmar"
+  },
+  "files": [
+    "skills/",
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}
