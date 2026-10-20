@@ -11,7 +11,7 @@ import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
 
-const LLM_USAGE_PACKAGE = "llm-usage-metrics@0.12.1";
+const LLM_USAGE_PACKAGE = "llm-usage-metrics@latest";
 const HOME = os.homedir();
 const ROOTS = {
   codex: path.join(HOME, ".codex", "sessions"),
