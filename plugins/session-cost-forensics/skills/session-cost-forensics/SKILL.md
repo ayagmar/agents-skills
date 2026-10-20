@@ -13,7 +13,7 @@ Data sources (local defaults):
 - `~/.codex/sessions/`, `~/.pi/agent/sessions/`, `~/.claude/projects/` (Claude `subagents/` subdirectories hold delegated agents)
 - `~/.claude/history.jsonl` (prompt index only — no usage data)
 
-Tokens, cost, and models per session come from [llm-usage-metrics](https://github.com/ayagmar/llm-usage-metrics) (`llm-usage session --json`), which the script runs through `npx` at a pinned version. The script itself reads the session files only for what that report lacks: compactions, user prompts, and tool results.
+Tokens, cost, and models per session come from [llm-usage-metrics](https://github.com/ayagmar/llm-usage-metrics) (`llm-usage session --json`), which the script runs through `npx` at its latest release (`llm-usage-metrics@latest`); it stops if that release reports an unknown JSON `schemaVersion`. The script itself reads the session files only for what that report lacks: compactions, user prompts, and tool results.
 
 ## Workflow
 
@@ -22,9 +22,9 @@ Tokens, cost, and models per session come from [llm-usage-metrics](https://githu
    ```bash
    node scripts/session_cost_report.mjs --provider all --since YYYY-MM-DD --until YYYY-MM-DD [--project SUBSTR] [--include-subagents] [--top N] [--pricing-offline] [--json]
    ```
-   It reports per-session tokens (fresh input / cache read / cache write / output), cost, cache hit ratios, compaction counts, repeated identical prompts within a session (retry signal), and identical prompts across sessions (duplicate-session signal). `--since`/`--until` count only the usage inside the window. `--pricing-offline` skips the LiteLLM price download and uses cached or bundled prices. The first run downloads the package through `npx`, so it needs network access once.
+   It reports per-session tokens (fresh input / cache read / cache write / output), cost, cache hit ratios, compaction counts, repeated identical prompts within a session (retry signal), and identical prompts across sessions (duplicate-session signal). `--since`/`--until` count only the usage inside the window. `--pricing-offline` skips the LiteLLM price download and uses cached or bundled prices. Each run asks npm for the latest llm-usage-metrics release, so it needs network access to the registry.
 3. Interpret against the checklist in [references/waste-patterns.md](references/waste-patterns.md) — load it only when producing the findings, not for a raw numbers question.
-4. Verify the top findings by targeted inspection of the named session files (`rg`, `sed -n`) — check the shape of the waste, not the transcript content. Quote structure and counts, not sensitive message bodies. For one session request by request, `LLM_USAGE_EVENT_STORE=0 npx --yes llm-usage-metrics@latest session --id <session_id> --timeline --machine local --no-sync` lists each request with its running cost.
+4. Verify the top findings by targeted inspection of the named session files (`rg`, `sed -n`) — check the shape of the waste, not the transcript content. Quote structure and counts, not sensitive message bodies. For one session request by request, `LLM_USAGE_EVENT_STORE=0 LLM_USAGE_SKIP_UPDATE_CHECK=1 npx --yes llm-usage-metrics@latest session --id <session_id> --timeline --machine local --no-sync` lists each request with its running cost.
 5. Report findings with: exact session path, date, measured numbers, whether the claim is **measured** or **inferred**, and one actionable workflow/configuration change each.
 
 ## Reading the numbers
