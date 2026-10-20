@@ -145,19 +145,47 @@ function fallbackSessionId(provider, file) {
   return sep === -1 ? base : base.slice(sep + 1);
 }
 
+const CLAUDE_SUBAGENT_FILE = /^agent-([\w-]+)\.jsonl$/;
+
+// A forked Claude subagent transcript starts with its parent's lines, copied under the same
+// uuids. Like llm-usage-metrics, find the parent from the sidecar meta and skip those lines.
+function claudeForkCopiedUuids(file) {
+  const uuids = new Set();
+  const dir = path.dirname(file);
+  const match = CLAUDE_SUBAGENT_FILE.exec(path.basename(file));
+  if (!match || path.basename(dir) !== "subagents") return uuids;
+  try {
+    const meta = JSON.parse(fs.readFileSync(path.join(dir, `agent-${match[1]}.meta.json`), "utf8"));
+    if (meta?.isFork !== true) return uuids;
+    const parentAgentId = typeof meta.parentAgentId === "string" ? meta.parentAgentId.trim() : "";
+    const parent = parentAgentId ? path.join(dir, `agent-${parentAgentId}.jsonl`) : `${path.dirname(dir)}.jsonl`;
+    if (parentAgentId && !CLAUDE_SUBAGENT_FILE.test(path.basename(parent))) return uuids;
+    for (const line of fs.readFileSync(parent, "utf8").split("\n")) {
+      const e = safeParse(line);
+      if (typeof e?.uuid === "string") uuids.add(e.uuid);
+    }
+  } catch {
+    // No readable meta or parent: count the whole transcript.
+  }
+  return uuids;
+}
+
 // --- Structure the usage report does not carry: prompts, compactions, tool results.
 function scanFile(provider, file) {
   const s = {
     session_id: null,
     path: file,
     project: null,
-    is_subagent: provider === "claude" && file.includes(`${path.sep}subagents${path.sep}`),
+    // Current Claude Code writes subagents under <session>/subagents/; older versions wrote agent-<id>.jsonl beside the session.
+    is_subagent:
+      provider === "claude" && (file.includes(`${path.sep}subagents${path.sep}`) || CLAUDE_SUBAGENT_FILE.test(path.basename(file))),
     user_messages: 0,
     tool_results: 0,
     compactions: 0,
     prompt_fps: [],
   };
   const claudeIds = new Set();
+  const copied = provider === "claude" ? claudeForkCopiedUuids(file) : new Set();
   const prompt = (text) => {
     s.user_messages += 1;
     s.prompt_fps.push(fp(text));
@@ -190,6 +218,7 @@ function scanFile(provider, file) {
       if (m.role === "toolResult" || m.role === "tool") s.tool_results += 1;
     } else {
       if (e.sessionId) claudeIds.add(e.sessionId);
+      if (copied.has(e.uuid)) continue;
       s.project ??= e.cwd || null;
       if (e.type === "system" && e.subtype === "compact_boundary") s.compactions += 1;
       if (e.type !== "user" || e.isMeta || e.isCompactSummary) continue;
@@ -248,6 +277,8 @@ function main() {
     const scans = (files.get(`${row.source}\0${row.sessionId}`) || []).sort(
       (a, b) => a.is_subagent - b.is_subagent || a.path.localeCompare(b.path),
     );
+    // A subagent transcript is never cited as the session itself.
+    const cited = scans.find((s) => !s.is_subagent);
     const project = row.repoRoot || scans.find((s) => s.project)?.project || null;
     if (args.project && ![project || "", ...scans.map((s) => s.path)].some((v) => v.includes(args.project))) continue;
     const fps = scans.flatMap((s) => s.prompt_fps);
@@ -257,8 +288,8 @@ function main() {
     sessions.push({
       provider: row.source,
       session_id: row.sessionId,
-      path: scans[0]?.path ?? null,
-      other_paths: scans.slice(1).map((s) => s.path),
+      path: cited?.path ?? null,
+      other_paths: scans.filter((s) => s !== cited).map((s) => s.path),
       project,
       subagent_transcripts: scans.filter((s) => s.is_subagent).length,
       first_ts: row.firstActivity,

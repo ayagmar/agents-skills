@@ -10,7 +10,7 @@ compatibility: Requires Node.js 22.19+ and npx. Reads local Codex (~/.codex), Pi
 Measure where agent-session tokens, cost, and context go, then turn measurements into workflow changes. Read-only over the session stores; never modify or delete session files.
 
 Data sources (local defaults):
-- `~/.codex/sessions/` (or `$CODEX_HOME/sessions/`), `~/.pi/agent/sessions/` and `~/.omp/agent/sessions/`, `~/.claude/projects/` and `~/.claude/transcripts/` (or the same under each comma-separated `$CLAUDE_CONFIG_DIR`). Claude `subagents/` subdirectories hold delegated agents. The script passes these directories to llm-usage-metrics, so its `sourceDirs` config does not apply.
+- `~/.codex/sessions/` (or `$CODEX_HOME/sessions/`), `~/.pi/agent/sessions/` and `~/.omp/agent/sessions/`, `~/.claude/projects/` and `~/.claude/transcripts/` (or the same under each comma-separated `$CLAUDE_CONFIG_DIR`). Claude `subagents/` subdirectories, and `agent-<id>.jsonl` files from older versions, hold delegated agents. The script passes these directories to llm-usage-metrics, so its `sourceDirs` config does not apply.
 - `~/.claude/history.jsonl` (prompt index only — no usage data)
 
 Tokens, cost, and models per session come from [llm-usage-metrics](https://github.com/ayagmar/llm-usage-metrics) (`llm-usage session --json`), which the script runs through `npx` at its latest release (`llm-usage-metrics@latest`); it stops if that release reports an unknown JSON `schemaVersion`. The script itself reads the session files only for what that report lacks: compactions, user prompts, and tool results.
@@ -30,7 +30,7 @@ Tokens, cost, and models per session come from [llm-usage-metrics](https://githu
 ## Reading the numbers
 
 - Cost: Pi's is the cost Pi logged; Codex and Claude Code costs are estimates from LiteLLM list prices. `~$` (or `cost_incomplete`) means some requests had no known price; `-` means none had one.
-- Claude Code subagents: their tokens and cost are always counted in the parent session, because llm-usage-metrics files them under the parent's session id. `--include-subagents` adds the subagent transcripts' prompts, compactions, and tool results to the parent, lists them in `other_paths`, and counts them in `subagent_transcripts`; it cannot split tokens per subagent.
+- Claude Code subagents: their tokens and cost are always counted in the parent session, because llm-usage-metrics files them under the parent's session id. `--include-subagents` adds the subagent transcripts' prompts, compactions, and tool results to the parent (skipping the parent lines a forked subagent copies), lists them in `other_paths`, and counts them in `subagent_transcripts`; it cannot split tokens per subagent.
 - One session can span several files (subagents, resumed or forked transcripts); `path` is the main file and `other_paths` holds the rest.
 - Structure counts (compactions, prompts, tool results) cover whole files, even when the date window cuts a session in half.
 
