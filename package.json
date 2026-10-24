@@ -14,7 +14,7 @@
   "engines": {
     "node": ">=22.19"
   },
-  "packageManager": "npm@11.6.2",
+  "packageManager": "npm@12.2.1",
   "scripts": {
     "validate": "node scripts/validate.mjs",
     "validate:layout": "node scripts/check-layout.mjs",
@@ -30,15 +30,16 @@
     "release": "npm run validate && changeset publish"
   },
   "devDependencies": {
-    "@anthropic-ai/claude-code": "2.1.287",
+    "@anthropic-ai/claude-code": "2.1.310",
     "@changesets/cli": "3.0.3",
-    "@earendil-works/pi-coding-agent": "1.0.0",
-    "@openai/codex": "0.160.0",
+    "@earendil-works/pi-coding-agent": "1.4.0",
+    "@openai/codex": "0.164.0",
     "ajv-cli": "5.0.0",
     "skills": "1.7.0",
     "yaml": "2.9.1"
   },
   "overrides": {
-    "fast-json-patch": "3.1.1"
+    "fast-json-patch": "3.1.1",
+    "undici": "8.12.3"
   }
 }
