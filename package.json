@@ -35,7 +35,7 @@
     "@earendil-works/pi-coding-agent": "1.4.0",
     "@openai/codex": "0.164.0",
     "ajv-cli": "5.0.0",
-    "skills": "1.7.0",
+    "skills": "1.7.4",
     "yaml": "2.9.1"
   },
   "overrides": {
