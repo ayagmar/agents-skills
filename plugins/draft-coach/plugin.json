@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "draft-coach",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Coach the author of a blog post or note draft in a static-site repo: check its frontmatter against the repo's own rules, rank what the body is missing, flag padded lines, and end with a publish verdict.",
   "author": {
     "name": "Abdeslam Yassine Agmar",
