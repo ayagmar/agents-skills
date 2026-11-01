@@ -38,6 +38,17 @@
       "category": "Developer Tools"
     },
     {
+      "name": "draft-coach",
+      "source": {
+        "source": "local",
+        "path": "./plugins/draft-coach"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "engineering-optimization",
       "source": {
         "source": "local",
