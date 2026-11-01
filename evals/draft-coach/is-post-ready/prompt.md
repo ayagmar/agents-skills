@@ -1,7 +1,7 @@
 ---
 plugins: ["../../../plugins/draft-coach", "../../../plugins/no-slop"]
-description: Routing. With no-slop also installed, asking whether a blog post file is ready to publish loads draft-coach, which owns drafts in a site repo.
-tags: [trigger, routing]
+description: Routing and output. With no-slop also installed, asking whether a blog post file is ready to publish loads draft-coach, which owns drafts in a site repo, and the reply is a coaching report with a verdict, not a rewrite. Tools are read-only here, so this tests what the reply says, not whether the file was changed.
+tags: [trigger, routing, output]
 allowed_tools: [Read, Glob, Grep, Skill]
 ---
 
