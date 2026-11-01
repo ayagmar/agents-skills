@@ -22,7 +22,7 @@ Only check against rules the repo has. Do not ask for a series link in a repo wi
 - **Summary or description**: one sentence that states the post's point, in the field the schema names.
 - **Tags**: reuse existing tags; list the near-duplicates you found (`rust` vs `Rust`, `perf` vs `performance`). A new tag needs a reason, such as a topic no existing post covers.
 - **Links**: series, related projects, or related posts, when the schema has fields for them and a fitting target exists.
-- **Cover or art**: present and valid when the schema requires or supports it.
+- **Cover or art**: required only when the schema or writing guide requires it. Check an optional cover only when the draft sets one; when it is absent, offer variants (step 5) but never count it as a finding or a blocker.
 - **Required fields and types**: anything the schema would reject, such as a missing date or a wrong format, comes first, because it breaks the build.
 
 ## 3. Read the body

@@ -11,4 +11,4 @@ PASS if the reply does all of these:
 - Quotes at least two padded lines (for example the "fast-paced world" opener, "Let's dive in", or the conclusion) with a shorter alternative for each (recommending a cut counts as the alternative).
 - Ends with a verdict that the post needs work, naming what blocks it.
 
-FAIL if it says the post is ready to publish, rewrites the whole post or whole paragraphs in its own voice, or invents numbers or facts the draft does not contain (such as a benchmark figure).
+FAIL if it says the post is ready to publish, rewrites the whole post or whole paragraphs in its own voice, invents numbers or facts the draft does not contain (such as a benchmark figure), or treats the missing `heroImage` as a problem or a blocker (the schema makes it optional).
