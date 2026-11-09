@@ -30,12 +30,12 @@
     "release": "npm run validate && changeset publish"
   },
   "devDependencies": {
-    "@anthropic-ai/claude-code": "2.1.310",
+    "@anthropic-ai/claude-code": "2.1.319",
     "@changesets/cli": "3.0.3",
-    "@earendil-works/pi-coding-agent": "1.4.0",
-    "@openai/codex": "0.164.0",
+    "@earendil-works/pi-coding-agent": "1.5.0",
+    "@openai/codex": "0.167.0",
     "ajv-cli": "5.0.0",
-    "skills": "1.7.0",
+    "skills": "1.7.6",
     "yaml": "2.9.1"
   },
   "overrides": {
